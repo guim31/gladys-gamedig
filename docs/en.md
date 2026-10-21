@@ -50,9 +50,7 @@ can send chat messages.
      type its id from the GameDig games list (`barotrauma`, `insurgency`…) in
      **GameDig type**;
    - enter the **Address**: `192.168.1.20`, `game.example.com`, and
-     `:port` when the port is not the default one of the game. The game port
-     or the query port both work: GameDig tries the query port of the game
-     first;
+     `:port` when the port is not the default one of the game. Usually the game port: GameDig derives the query port of most games from it, and the query port itself works too. Palworld wants the port of its REST API (8212), Farming Simulator that of its web interface (8080);
    - optionally a **Name shown in Gladys**, and the **Password or token** of
      the few games that need one.
 3. Choose the **Reading interval** (1 minute by default), and if needed the
@@ -105,8 +103,7 @@ in the widget settings.
 - **The game server is empty**: the last player left.
 - **The game server is full**: every player slot is taken.
 
-Every trigger can be limited to one server, and gives the server name, the
-game and the player counts to the following actions. A server restarting
+Every trigger can be limited to one server, and gives the server name and the game to the following actions, and the player counts except when the server goes offline. A server already offline when the integration starts fires no "went offline". A server restarting
 with many players fires ten "joined" events at most.
 
 ### Actions
@@ -145,6 +142,7 @@ with many players fires ten "joined" events at most.
 - Read every minute by default (30 seconds at the fastest): a player who stays
   less than an interval may not be seen, and the events come one reading
   late.
+- ARK: Survival Ascended and Factorio are not in the list: GameDig reads them through the lobby API of their publisher, which only knows public servers and would receive the address. They remain possible through **Other (GameDig type)** (`asa`, `factorio`).
 - Up to four servers. GameDig reads what each game publishes: names, map and
   version depend on the game, and some games publish fewer players than are
   online.

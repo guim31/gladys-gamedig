@@ -85,5 +85,6 @@ test('a real server, a closed port and an unknown name', { skip: !HOST }, async 
   await app.hub.pollAll();
   assert.equal(value('online', 2), 0);
   assert.equal(value('online', 3), 0);
-  assert.equal(fake.sceneEvents.filter((event) => event.key === 'server_offline').length, 2);
+  // Never seen answering: offline, but no "went offline" event.
+  assert.equal(fake.sceneEvents.filter((event) => event.key === 'server_offline').length, 0);
 });

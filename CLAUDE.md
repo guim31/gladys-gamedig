@@ -220,8 +220,11 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 ## GameDig (propre à ce dépôt)
 
 - **GameDig 5** (ESM, ~7 Mo de dépendances, aucune native). Une seule instance `GameDig` pour le
-  processus : elle partage **un socket UDP** entre les requêtes et mémorise le port qui a répondu
-  (`portCache`). Le réseau en pont du bac à sable suffit (UDP sortant), pas besoin de
+  processus : elle partage **un socket UDP** entre les requêtes. **`portCache: false`** : GameDig
+  indexe son cache sur `address`, que l'intégration ne passe pas (`host`), donc tous les serveurs
+  partageaient une entrée et un appareil Valheim lisait le CS2 de la même machine (relecture du
+  21/10). `givenPortOnly` quand le jeu n'a ni décalage ni port de requête fixe (sinon le même port
+  deux fois). Le réseau en pont du bac à sable suffit (UDP sortant), pas besoin de
   `listenUdpPort`.
 - **Port** : avec un port saisi, GameDig essaie `port + port_query_offset` du jeu, puis le port
   lui-même : le port de jeu **et** le port de requête marchent. Sans port, le port de requête du
@@ -231,6 +234,9 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 - **Une erreur GameDig ne dit pas pourquoi** : « Failed all N attempts », avec dans `stack` la pile
   de chaque essai (URL, et pour Satisfactory/Terraria un jeton possible). `src/query.js` n'en garde
   que le type (DNS ou pas de réponse) : ne jamais journaliser l'erreur brute.
+- Valve sans liste de joueurs (CS2) : `bots` reste vide, le nombre de bots est dans
+  `raw.numbots`. ASA et Factorio passent par l'API de lobby de leur éditeur (Epic, Wube) : retirés
+  de la liste (serveurs maison introuvables, adresse envoyée à un tiers).
 - **`numplayers` n'a pas le même sens partout** : Valve et Quake y comptent les bots (listés dans
   `bots`, ping 0 pour Quake 3), d'autres non ; `maxplayers` et `password` arrivent parfois en
   chaîne (`"16"`, `"0"` sur OpenArena). `readState` retire les bots quand `numplayers` couvre
@@ -238,7 +244,8 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
   (CS2 n'en donne aucun, Valheim crossplay des vides).
 - Arrivées/départs : par nom entre deux lectures complètes, sinon **par nombre** (événement sans
   pseudo), 10 au plus par lecture. Première lecture et retour de panne = nouvelle base, sans
-  événement. Une panne ne déclenche ni départs ni « vide ».
+  événement. Une panne ne déclenche ni départs ni « vide » ; un serveur jamais vu en ligne ne
+  déclenche pas « hors ligne ». Une seule réponse perdue ne change ni le statut ni le widget.
 - **Carte, nom du serveur, version** ne sont publiés qu'une fois vus non vides (`record.seen`) :
   Mumble n'a pas de carte. L'appareil est republié quand l'ensemble grandit (« Mettre à jour » dans
   Découverte si l'appareil était déjà ajouté).

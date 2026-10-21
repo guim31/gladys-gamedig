@@ -52,9 +52,7 @@ enviar mensajes al chat.
      escriba su identificador de la lista de juegos de GameDig (`barotrauma`,
      `insurgency`…) en **Tipo GameDig**;
    - introduzca la **Dirección**: `192.168.1.20`, `game.example.com`, y
-     `:puerto` cuando el puerto no sea el predeterminado del juego. Sirven
-     tanto el puerto de juego como el de consulta: GameDig prueba primero el
-     puerto de consulta del juego;
+     `:puerto` cuando el puerto no sea el predeterminado del juego. Normalmente el puerto de juego: GameDig deduce de él el puerto de consulta de la mayoría de los juegos, y el propio puerto de consulta también sirve. Palworld pide el puerto de su API REST (8212), Farming Simulator el de su interfaz web (8080);
    - si lo desea, un **Nombre mostrado en Gladys**, y la **Contraseña o
      token** de los pocos juegos que lo piden.
 3. Elija el **Intervalo de lectura** (1 minuto por defecto) y, si hace falta,
@@ -113,8 +111,7 @@ servidores por defecto, o el elegido en la configuración del widget.
 - **El servidor de juego está vacío**: el último jugador se ha ido.
 - **El servidor de juego está lleno**: todas las plazas están ocupadas.
 
-Cada disparador puede limitarse a un servidor, y pasa a las acciones
-siguientes el nombre del servidor, el juego y el número de jugadores. Un
+Cada disparador puede limitarse a un servidor, y pasa a las acciones siguientes el nombre del servidor y el juego, y el número de jugadores salvo cuando el servidor se cae. Un servidor ya fuera de línea al arrancar la integración no dispara «fuera de línea». Un
 servidor que se reinicia con muchos jugadores dispara diez llegadas como
 máximo.
 
@@ -160,6 +157,7 @@ máximo.
 - Lectura cada minuto por defecto (cada 30 segundos como máximo): un jugador
   que se queda menos de un intervalo puede pasar desapercibido, y los eventos
   llegan con una lectura de retraso.
+- ARK: Survival Ascended y Factorio no están en la lista: GameDig los lee a través de la API de lobby de su editor, que solo conoce los servidores públicos y recibiría la dirección. Siguen siendo posibles con **Otro (tipo GameDig)** (`asa`, `factorio`).
 - Cuatro servidores como máximo. GameDig lee lo que publica cada juego:
   nombres, mapa y versión dependen del juego, y algunos juegos anuncian menos
   jugadores de los que hay.

@@ -25,7 +25,7 @@ it reads the complete player list through RCON and sends chat messages.
 - **Dashboard widget** "Game servers": one tile per server, its state, map and
   who is playing.
 - **Test the connection** button: one line per server.
-- A drop-down list of 36 common games, and any other GameDig type (or
+- A drop-down list of 34 common games, and any other GameDig type (or
   `protocol-<name>`) in a free field. Reading interval, answer timeout and
   attempts can be set. Every text in English, French, German and Spanish.
 
@@ -78,7 +78,8 @@ dedicated server in another container (`sago007/openarena`):
   (`test/real/real-server.test.js`): device, states, map, server name,
   version and ping read; two bots added through RCON not counted as players;
   a closed port reported as "does not answer", an unknown name as "name not
-  found", both offline after two readings;
+  found", both offline after two readings (without a "went offline"
+  event: they never answered);
 - the recordings of `test/fixtures/real/` come from that server;
 - without Gladys, the container retries the connection with a back-off, never
   crashes, writes no token; 26 MiB of memory at rest.

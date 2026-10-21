@@ -89,3 +89,27 @@ test('the timer stops with the integration', async (t) => {
   await settle();
   assert.equal(w.server.queries, before);
 });
+
+test('the timer starts even when Gladys refuses the devices', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { createFakeGladys } = await import('@gladysassistant/integration-sdk/testing');
+  const { registerHandlers } = await import('../src/app.js');
+  const { createNetwork } = await import('./helpers/fakeNetwork.js');
+  const server = new FakeServer();
+  const gladys = createFakeGladys({ config: { ...ONE_SERVER, poll_interval: '30' } });
+  gladys.publishDiscoveredDevices = async () => {
+    throw new Error('HTTP 503');
+  };
+  const app = registerHandlers(gladys, {
+    network: createNetwork({ [HOST_1]: server }),
+    timers: true,
+    now: createClock().now,
+  });
+  t.after(() => app.stop());
+  await gladys.connect();
+  await app.ready;
+  const before = server.queries;
+  t.mock.timers.tick(30_000);
+  await settle();
+  assert.equal(server.queries, before + 1);
+});

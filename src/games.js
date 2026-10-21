@@ -25,7 +25,6 @@ export const COMMON_GAMES = [
   ['l4d2', 'Left 4 Dead 2'],
   ['rust', 'Rust'],
   ['ase', 'ARK: Survival Evolved'],
-  ['asa', 'ARK: Survival Ascended'],
   ['satisfactory', 'Satisfactory'],
   ['palworld', 'Palworld'],
   ['terrariatshock', 'Terraria (TShock)'],
@@ -37,7 +36,6 @@ export const COMMON_GAMES = [
   ['conanexiles', 'Conan Exiles'],
   ['dayz', 'DayZ'],
   ['arma3', 'Arma 3'],
-  ['factorio', 'Factorio'],
   ['unturned', 'Unturned'],
   ['spaceengineers', 'Space Engineers'],
   ['dst', "Don't Starve Together"],
@@ -55,6 +53,11 @@ export const COMMON_GAMES = [
 export const GAME_VALUES = [...COMMON_GAMES.map(([value]) => value), OTHER_GAME];
 
 const LABELS = new Map(COMMON_GAMES);
+
+// Not in the list: ARK: Survival Ascended and Factorio, which GameDig reads
+// through the lobby API of their publisher (Epic, Wube): a server at home is
+// never found there, and its address would leave for a third party. Still
+// possible through "Other".
 
 // Protocols that read a secret (GameDig options): Palworld's REST API wants
 // the admin password, these ones an API token.
@@ -88,6 +91,16 @@ export function gameLabel(type) {
     return type.slice('protocol-'.length);
   }
   return GAMEDIG_GAMES[type]?.name ?? type;
+}
+
+/**
+ * Whether GameDig tries another port than a typed one: a query port offset
+ * (Valheim: game port + 1), or a fixed query port (Conan Exiles: 27015).
+ */
+export function triesOtherPorts(type) {
+  const options = GAMEDIG_GAMES[type]?.options ?? {};
+  const offsets = [options.port_query_offset].flat().filter(Boolean);
+  return offsets.length > 0 || Boolean(options.port_query);
 }
 
 /** The GameDig options carrying the secret of the configuration, if any. */

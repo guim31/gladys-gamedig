@@ -88,21 +88,25 @@ export const PLAYERS_TEXT = {
 export const REPORT_TEXT = {
   en: {
     players: (online, max) => `${online}/${max} players`,
+    count: (online) => `${online} player(s)`,
     latency: (ms) => `${ms} ms`,
     map: (map) => `map ${map}`,
   },
   fr: {
     players: (online, max) => `${online}/${max} joueurs`,
+    count: (online) => `${online} joueur(s)`,
     latency: (ms) => `${ms} ms`,
     map: (map) => `carte ${map}`,
   },
   de: {
     players: (online, max) => `${online}/${max} Spieler`,
+    count: (online) => `${online} Spieler`,
     latency: (ms) => `${ms} ms`,
     map: (map) => `Karte ${map}`,
   },
   es: {
     players: (online, max) => `${online}/${max} jugadores`,
+    count: (online) => `${online} jugador(es)`,
     latency: (ms) => `${ms} ms`,
     map: (map) => `mapa ${map}`,
   },

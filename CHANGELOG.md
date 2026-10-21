@@ -13,7 +13,7 @@ the notes of the version's GitHub Release.
 ### Added
 
 - Game servers in Gladys through GameDig (more than 300 games): up to four
-  servers, picked from a list of 36 common games or by any GameDig type.
+  servers, picked from a list of 34 common games or by any GameDig type.
 - One device per server: Online, Players online (bots left out), Player
   slots, Players (names, or a count when the game gives none), Map, Server
   name, Version and Ping.

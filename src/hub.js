@@ -176,9 +176,14 @@ export class GameServerHub {
       this.gladys.forgetPublishedStates();
     }
     // Read first: the devices then carry the optional features the games give.
-    await this.pollAll({ publish: false });
-    await this.publishDevices();
-    this.schedulePoll();
+    // The timer starts whatever happens: a refused discovery must not stop
+    // the readings, the scene events and the widget.
+    try {
+      await this.pollAll({ publish: false });
+      await this.publishDevices();
+    } finally {
+      this.schedulePoll();
+    }
   }
 
   newRecord(server) {
@@ -241,7 +246,12 @@ export class GameServerHub {
       buildDevice(this.gladys, record.server, record.seen, this.language),
     );
     // Even an empty list: the Discovery tab then shows no stale server.
-    await this.gladys.publishDiscoveredDevices(devices);
+    try {
+      await this.gladys.publishDiscoveredDevices(devices);
+      this.resolved('discovery');
+    } catch (err) {
+      this.problem('discovery', `Devices refused by Gladys: ${err.message}`);
+    }
   }
 
   /** "Search" in the Discovery tab: read the servers, publish the devices again. */
@@ -405,9 +415,13 @@ export class GameServerHub {
       record.lastOnline = null;
       record.names = null;
       record.joinedAt.clear();
-      await this.fire(TRIGGERS.SERVER_OFFLINE, record, {
-        error: pick(ERROR_TEXT[err.kind], this.language),
-      });
+      // Only a server seen answering goes offline: one already down when the
+      // integration starts (Gladys restarted, a new address) fires nothing.
+      if (record.status !== null) {
+        await this.fire(TRIGGERS.SERVER_OFFLINE, record, {
+          error: pick(ERROR_TEXT[err.kind], this.language),
+        });
+      }
     }
     if (record.down) {
       // Every reading, for the heartbeat of a long outage (only changes are sent).
@@ -587,7 +601,8 @@ export class GameServerHub {
   connectionStatus() {
     const { servers, invalid } = this.config;
     const records = [...this.records.values()];
-    const failing = records.filter((record) => record.error);
+    // One lost answer is not an outage: only a server down counts.
+    const failing = records.filter((record) => record.down);
     if (servers.length > 0 && failing.length === 0 && invalid.length === 0) {
       return { connected: true };
     }
@@ -606,7 +621,7 @@ export class GameServerHub {
       }
       message[language] = parts.join(' · ').slice(0, 200);
     }
-    const answering = records.filter((record) => !record.error).length;
+    const answering = records.filter((record) => !record.down).length;
     return { connected: answering > 0, message };
   }
 
@@ -670,7 +685,7 @@ export class GameServerHub {
         const { status } = record;
         const parts = [
           gameLabel(record.server.type),
-          text.players(status.online, status.max),
+          status.max > 0 ? text.players(status.online, status.max) : text.count(status.online),
           text.latency(status.latencyMs),
         ];
         if (status.map) {

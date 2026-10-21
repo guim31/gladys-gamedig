@@ -55,7 +55,8 @@ function message(text, language) {
   };
 }
 
-const answering = (record) => record.reachable === true && record.status;
+// One lost answer is not an outage: the last reading stays until the server is down.
+const answering = (record) => !record.down && record.status !== null;
 
 /** The tile of one server: players online / slots. */
 function serverTile(record, label, language) {

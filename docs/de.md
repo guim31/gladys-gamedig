@@ -51,9 +51,7 @@ kann Chatnachrichten senden.
      und gib seine Kennung aus der Spieleliste von GameDig (`barotrauma`,
      `insurgency`…) unter **GameDig-Typ** ein;
    - gib die **Adresse** ein: `192.168.1.20`, `game.example.com` und
-     `:Port`, wenn der Port nicht der Standard des Spiels ist. Spielport und
-     Abfrageport gehen beide: GameDig versucht zuerst den Abfrageport des
-     Spiels;
+     `:Port`, wenn der Port nicht der Standard des Spiels ist. Meist der Spielport: GameDig leitet daraus bei den meisten Spielen den Abfrageport ab, und der Abfrageport selbst geht auch. Palworld will den Port seiner REST-API (8212), Farming Simulator den seiner Weboberfläche (8080);
    - optional einen **In Gladys angezeigten Namen** und das **Passwort oder
      Token** der wenigen Spiele, die eines brauchen.
 3. Wähle das **Abfrageintervall** (standardmäßig 1 Minute) und bei Bedarf die
@@ -109,8 +107,7 @@ den Widget-Einstellungen gewählte.
 - **Der Spieleserver ist leer**: Der letzte Spieler ist gegangen.
 - **Der Spieleserver ist voll**: Alle Spielerplätze sind belegt.
 
-Jeder Auslöser lässt sich auf einen Server beschränken und gibt den folgenden
-Aktionen den Servernamen, das Spiel und die Spielerzahlen weiter. Ein Server,
+Jeder Auslöser lässt sich auf einen Server beschränken und gibt den folgenden Aktionen den Servernamen und das Spiel weiter, und die Spielerzahlen außer beim Ausfall. Ein Server, der beim Start der Integration schon offline ist, löst kein „offline“ aus. Ein Server,
 der mit vielen Spielern neu startet, löst höchstens zehn Beitritte aus.
 
 ### Aktionen
@@ -154,6 +151,7 @@ der mit vielen Spielern neu startet, löst höchstens zehn Beitritte aus.
 - Standardmäßig jede Minute gelesen (höchstens alle 30 Sekunden): Ein
   Spieler, der kürzer als ein Intervall bleibt, wird vielleicht nicht
   gesehen, und die Ereignisse kommen eine Abfrage später.
+- ARK: Survival Ascended und Factorio stehen nicht in der Liste: GameDig liest sie über die Lobby-API ihres Herausgebers, die nur öffentliche Server kennt und die Adresse erhalten würde. Über **Anderes (GameDig-Typ)** gehen sie weiterhin (`asa`, `factorio`).
 - Bis zu vier Server. GameDig liest, was jedes Spiel veröffentlicht: Namen,
   Karte und Version hängen vom Spiel ab, und manche Spiele melden weniger
   Spieler, als online sind.

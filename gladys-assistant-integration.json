@@ -164,15 +164,6 @@
           }
         },
         {
-          "value": "asa",
-          "label": {
-            "en": "ARK: Survival Ascended",
-            "fr": "ARK: Survival Ascended",
-            "de": "ARK: Survival Ascended",
-            "es": "ARK: Survival Ascended"
-          }
-        },
-        {
           "value": "satisfactory",
           "label": {
             "en": "Satisfactory",
@@ -269,15 +260,6 @@
             "fr": "Arma 3",
             "de": "Arma 3",
             "es": "Arma 3"
-          }
-        },
-        {
-          "value": "factorio",
-          "label": {
-            "en": "Factorio",
-            "fr": "Factorio",
-            "de": "Factorio",
-            "es": "Factorio"
           }
         },
         {
@@ -616,15 +598,6 @@
           }
         },
         {
-          "value": "asa",
-          "label": {
-            "en": "ARK: Survival Ascended",
-            "fr": "ARK: Survival Ascended",
-            "de": "ARK: Survival Ascended",
-            "es": "ARK: Survival Ascended"
-          }
-        },
-        {
           "value": "satisfactory",
           "label": {
             "en": "Satisfactory",
@@ -721,15 +694,6 @@
             "fr": "Arma 3",
             "de": "Arma 3",
             "es": "Arma 3"
-          }
-        },
-        {
-          "value": "factorio",
-          "label": {
-            "en": "Factorio",
-            "fr": "Factorio",
-            "de": "Factorio",
-            "es": "Factorio"
           }
         },
         {
@@ -1068,15 +1032,6 @@
           }
         },
         {
-          "value": "asa",
-          "label": {
-            "en": "ARK: Survival Ascended",
-            "fr": "ARK: Survival Ascended",
-            "de": "ARK: Survival Ascended",
-            "es": "ARK: Survival Ascended"
-          }
-        },
-        {
           "value": "satisfactory",
           "label": {
             "en": "Satisfactory",
@@ -1173,15 +1128,6 @@
             "fr": "Arma 3",
             "de": "Arma 3",
             "es": "Arma 3"
-          }
-        },
-        {
-          "value": "factorio",
-          "label": {
-            "en": "Factorio",
-            "fr": "Factorio",
-            "de": "Factorio",
-            "es": "Factorio"
           }
         },
         {
@@ -1520,15 +1466,6 @@
           }
         },
         {
-          "value": "asa",
-          "label": {
-            "en": "ARK: Survival Ascended",
-            "fr": "ARK: Survival Ascended",
-            "de": "ARK: Survival Ascended",
-            "es": "ARK: Survival Ascended"
-          }
-        },
-        {
           "value": "satisfactory",
           "label": {
             "en": "Satisfactory",
@@ -1625,15 +1562,6 @@
             "fr": "Arma 3",
             "de": "Arma 3",
             "es": "Arma 3"
-          }
-        },
-        {
-          "value": "factorio",
-          "label": {
-            "en": "Factorio",
-            "fr": "Factorio",
-            "de": "Factorio",
-            "es": "Factorio"
           }
         },
         {
@@ -2094,7 +2022,7 @@
         "de": "Fragt jeden Server sofort ab und meldet, was er findet.",
         "es": "Consulta cada servidor ahora e indica lo que encuentra."
       },
-      "timeout_seconds": 90
+      "timeout_seconds": 120
     }
   ],
   "scene_triggers": [
@@ -2646,7 +2574,7 @@
         "de": "Fragt ihn sofort ab. Sein Zustand geht an die nächsten Schritte: eine Nachricht oder „Nur fortfahren, wenn“ auf Online.",
         "es": "Lo consulta ahora. Su estado pasa a los pasos siguientes: un mensaje, o «Continuar solo si» sobre En línea."
       },
-      "timeout_seconds": 60,
+      "timeout_seconds": 120,
       "fields": [
         {
           "key": "device",

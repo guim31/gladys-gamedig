@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import { games } from 'gamedig';
 import { formatAddress, parseAddress } from '../src/address.js';
 import { COMMON_GAMES, GAME_VALUES, gameLabel, isKnownType, secretOptions } from '../src/games.js';
-import { readState } from '../src/query.js';
+import { queryOptions, readState } from '../src/query.js';
 import { realAnswer } from './helpers/fakeNetwork.js';
 
 test('the real OpenArena answers: bots are not players, strings become numbers', () => {
@@ -98,4 +98,38 @@ test('addresses as typed in a server browser', () => {
     assert.equal(parseAddress(bad), null, String(bad));
   }
   assert.equal(formatAddress({ host: '2001:db8::1', port: 27015 }), '[2001:db8::1]:27015');
+});
+
+test('the GameDig options: no shared port cache, the typed port alone when no other is tried', () => {
+  const base = { secret: null };
+  const at = (type, port) =>
+    queryOptions(
+      { ...base, type, address: { host: '192.0.2.10', port } },
+      {
+        timeoutMs: 3000,
+        attempts: 2,
+      },
+    );
+  const valheim = at('valheim', 2456);
+  assert.equal(valheim.portCache, false);
+  assert.equal(valheim.givenPortOnly, undefined, 'Valheim: game port + 1 is tried too');
+  assert.equal(at('conanexiles', 7777).givenPortOnly, undefined, 'its fixed query port too');
+  assert.equal(at('counterstrike2', 27016).givenPortOnly, true);
+  assert.equal(at('counterstrike2', null).port, undefined, 'no port: the default of the game');
+  assert.deepEqual(
+    [valheim.maxRetries, valheim.socketTimeout, valheim.attemptTimeout],
+    [2, 3000, 12000],
+  );
+});
+
+test('Valve without a player list: the bots come from numbots', () => {
+  const cs2 = readState({
+    numplayers: 8,
+    maxplayers: 10,
+    players: [],
+    bots: [],
+    raw: { numbots: 6 },
+  });
+  assert.equal(cs2.online, 2);
+  assert.equal(cs2.bots, 6);
 });

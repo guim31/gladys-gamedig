@@ -49,9 +49,7 @@ peut envoyer des messages dans le chat.
      GameDig)** et tapez son identifiant de la liste des jeux de GameDig
      (`barotrauma`, `insurgency`…) dans **Type GameDig** ;
    - saisissez l'**Adresse** : `192.168.1.20`, `game.example.com`, et
-     `:port` quand le port n'est pas celui par défaut du jeu. Le port de jeu
-     comme le port de requête conviennent : GameDig essaie d'abord le port de
-     requête du jeu ;
+     `:port` quand le port n'est pas celui par défaut du jeu. En général le port de jeu : GameDig en déduit le port de requête de la plupart des jeux, et le port de requête lui-même marche aussi. Palworld veut le port de son API REST (8212), Farming Simulator celui de son interface web (8080) ;
    - si vous voulez, un **Nom affiché dans Gladys**, et le **Mot de passe ou
      jeton** des quelques jeux qui en demandent un.
 3. Choisissez l'**Intervalle de lecture** (1 minute par défaut), et au besoin
@@ -109,8 +107,7 @@ défaut, ou celui choisi dans les réglages du widget.
 - **Le serveur de jeu est vide** : le dernier joueur est parti.
 - **Le serveur de jeu est plein** : toutes les places sont prises.
 
-Chaque déclencheur peut se limiter à un serveur, et passe aux actions
-suivantes le nom du serveur, le jeu et le nombre de joueurs. Un serveur qui
+Chaque déclencheur peut se limiter à un serveur, et passe aux actions suivantes le nom du serveur et le jeu, et le nombre de joueurs sauf quand le serveur tombe. Un serveur déjà hors ligne au démarrage de l'intégration ne déclenche pas « hors ligne ». Un serveur qui
 redémarre avec beaucoup de joueurs déclenche dix arrivées au plus.
 
 ### Actions
@@ -152,6 +149,7 @@ redémarre avec beaucoup de joueurs déclenche dix arrivées au plus.
 - Lecture toutes les minutes par défaut (30 secondes au plus vite) : un joueur
   qui reste moins d'un intervalle peut passer inaperçu, et les événements
   arrivent avec une lecture de retard.
+- ARK: Survival Ascended et Factorio ne sont pas dans la liste : GameDig les lit par l'API de lobby de leur éditeur, qui ne connaît que les serveurs publics et recevrait l'adresse. Ils restent possibles par **Autre (type GameDig)** (`asa`, `factorio`).
 - Quatre serveurs au plus. GameDig lit ce que chaque jeu publie : noms, carte
   et version dépendent du jeu, et certains jeux annoncent moins de joueurs
   qu'il n'y en a.

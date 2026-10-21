@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 
 import { GameDig } from 'gamedig';
-import { secretOptions } from './games.js';
+import { secretOptions, triesOtherPorts } from './games.js';
 
 export const ERROR_KINDS = Object.freeze({
   NO_ANSWER: 'no_answer',
@@ -27,17 +27,17 @@ export class QueryError extends Error {
 }
 
 // One runner for the whole process: GameDig shares a single UDP socket
-// between the queries, and remembers the port that answered for each server.
+// between the queries. Its port cache is off: GameDig keys it on `address`,
+// which the integration never passes, so every server would share one entry
+// and a Valheim device could read the CS2 server of the same machine.
 let runner = null;
 
 /**
- * Query one server.
+ * The GameDig options of one query.
  * @param {{ type: string, address: { host: string, port: number|null }, secret: string|null }} server
  * @param {{ timeoutMs: number, attempts: number }} options
- * @returns {Promise<object>} the reading (readState)
  */
-export async function queryServer(server, { timeoutMs, attempts }) {
-  runner ??= new GameDig();
+export function queryOptions(server, { timeoutMs, attempts }) {
   const options = {
     type: server.type,
     host: server.address.host,
@@ -45,14 +45,28 @@ export async function queryServer(server, { timeoutMs, attempts }) {
     socketTimeout: timeoutMs,
     // A Valve query is up to three exchanges (info, players, challenge).
     attemptTimeout: timeoutMs * 4,
+    portCache: false,
     ...secretOptions(server.type, server.secret),
   };
   if (server.address.port !== null) {
     options.port = server.address.port;
+    // Otherwise GameDig would try the same port twice.
+    if (!triesOtherPorts(server.type)) {
+      options.givenPortOnly = true;
+    }
   }
+  return options;
+}
+
+/**
+ * Query one server.
+ * @returns {Promise<object>} the reading (readState)
+ */
+export async function queryServer(server, options) {
+  runner ??= new GameDig();
   let state;
   try {
-    state = await runner.query(options);
+    state = await runner.query(queryOptions(server, options));
   } catch (err) {
     throw toQueryError(err, server.address.host);
   }
@@ -94,7 +108,12 @@ const count = (value) => {
  */
 export function readState(state = {}) {
   const players = Array.isArray(state.players) ? state.players : [];
-  const bots = Array.isArray(state.bots) ? state.bots.length : 0;
+  // Valve only fills `bots` from the player list: Counter-Strike 2, which
+  // gives no list, only says how many in `raw.numbots`.
+  const bots = Math.max(
+    Array.isArray(state.bots) ? state.bots.length : 0,
+    count(state.raw?.numbots),
+  );
   const reported = count(state.numplayers);
   const online =
     reported >= players.length + bots && bots > 0

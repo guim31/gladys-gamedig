@@ -308,3 +308,31 @@ test('a new configuration keeps the device of a renamed server and drops a remov
   await w.fake.configUpdated({ language: 'fr' });
   assert.deepEqual(w.fake.discoveredDevices, []);
 });
+
+test('a server already down at start goes offline without a scene event', async (t) => {
+  const server = new FakeServer();
+  server.online = false;
+  const w = await world(t, { server });
+  await w.hub.pollAll();
+  assert.equal(state(w, 'online'), 0);
+  assert.deepEqual(events(w, TRIGGERS.SERVER_OFFLINE), []);
+  server.online = true;
+  await w.hub.pollAll();
+  assert.equal(events(w, TRIGGERS.SERVER_ONLINE).length, 1, 'it starting is worth an event');
+});
+
+test('one lost answer leaves the status, the widget and the states as they were', async (t) => {
+  const w = await world(t, { server: new FakeServer({ players: ['Ranger'] }) });
+  w.server.online = false;
+  await w.hub.pollAll();
+  assert.equal(w.fake.connectionStatus.connected, true);
+  const ack = await w.fake.widgetGet(WIDGET_KEY, { settings: {}, language: 'en' });
+  assert.equal(ack.data.content.components[0].value, '1/16');
+  assert.equal(state(w, 'online'), 1);
+});
+
+test('a count without slots in the report', async (t) => {
+  const w = await world(t, { server: new FakeServer({ players: ['a', 'b'], max: 0 }) });
+  const ack = await w.fake.action('test_connection');
+  assert.match(ack.data.message.en, /OpenArena, 2 player\(s\), 4 ms/);
+});
