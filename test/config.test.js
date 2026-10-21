@@ -1,33 +1,84 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeConfig, DEFAULT_CONFIG } from '../src/config.js';
+import { DEFAULT_CONFIG, normalizeConfig } from '../src/config.js';
 
-test('normalizeConfig returns the defaults when called with no argument', () => {
-  assert.deepEqual(normalizeConfig(), DEFAULT_CONFIG);
+test('the defaults: no server, a reading a minute, 3 s, 2 attempts, French names', () => {
+  assert.deepEqual(normalizeConfig(DEFAULT_CONFIG), {
+    servers: [],
+    invalid: [],
+    pollIntervalMs: 60_000,
+    timeoutMs: 3000,
+    attempts: 2,
+    language: 'fr',
+  });
+  assert.deepEqual(normalizeConfig(null).servers, []);
 });
 
-test('normalizeConfig keeps user values over the defaults', () => {
-  const config = normalizeConfig({ latitude: 45.5, longitude: -73.6, unit: 'fahrenheit' });
-  assert.equal(config.latitude, 45.5);
-  assert.equal(config.longitude, -73.6);
-  assert.equal(config.unit, 'fahrenheit');
+test('servers by slot, with the game, the free type, the name and the secret', () => {
+  const config = normalizeConfig({
+    server_1_game: 'valheim',
+    server_1_address: '192.0.2.10:2457',
+    server_1_name: '  Vikings  ',
+    server_2_address: '',
+    server_3_game: 'other',
+    server_3_type: ' Barotrauma ',
+    server_3_address: '192.0.2.30',
+    server_4_game: 'palworld',
+    server_4_address: '192.0.2.40:8212',
+    server_4_secret: ' pass word ',
+    poll_interval: '300',
+    timeout: 10,
+    attempts: '3',
+    language: 'de',
+  });
+  assert.deepEqual(config.servers, [
+    {
+      slot: 1,
+      type: 'valheim',
+      address: { host: '192.0.2.10', port: 2457 },
+      name: 'Vikings',
+      secret: null,
+    },
+    {
+      slot: 3,
+      type: 'barotrauma',
+      address: { host: '192.0.2.30', port: null },
+      name: null,
+      secret: null,
+    },
+    {
+      slot: 4,
+      type: 'palworld',
+      address: { host: '192.0.2.40', port: 8212 },
+      name: null,
+      secret: ' pass word ',
+    },
+  ]);
+  assert.equal(config.pollIntervalMs, 300_000);
+  assert.equal(config.timeoutMs, 10_000);
+  assert.equal(config.attempts, 3);
+  assert.equal(config.language, 'de');
 });
 
-test('normalizeConfig coerces numeric strings coming from a form', () => {
-  const config = normalizeConfig({ latitude: '48.8', longitude: '2.3', poll_frequency: '600' });
-  assert.equal(config.latitude, 48.8);
-  assert.equal(config.longitude, 2.3);
-  assert.equal(config.poll_frequency, 600);
-  assert.equal(typeof config.poll_frequency, 'number');
-});
-
-test('normalizeConfig falls back to the default for a missing numeric field', () => {
-  const config = normalizeConfig({ unit: 'celsius' });
-  assert.equal(config.poll_frequency, DEFAULT_CONFIG.poll_frequency);
-});
-
-test('GLADYS_PREFER_LOCAL defaults to true and only an explicit false disables it', () => {
-  assert.equal(normalizeConfig().GLADYS_PREFER_LOCAL, true);
-  assert.equal(normalizeConfig({ GLADYS_PREFER_LOCAL: true }).GLADYS_PREFER_LOCAL, true);
-  assert.equal(normalizeConfig({ GLADYS_PREFER_LOCAL: false }).GLADYS_PREFER_LOCAL, false);
+test('a wrong address or an unknown type is reported, never guessed', () => {
+  const config = normalizeConfig({
+    server_1_address: 'not an address',
+    server_2_game: 'other',
+    server_2_type: 'nope',
+    server_2_address: '192.0.2.20',
+    server_3_game: 'barotrauma',
+    server_3_address: '192.0.2.30',
+    server_4_game: '',
+    server_4_address: '192.0.2.40',
+    poll_interval: '5',
+    language: 'it',
+  });
+  assert.deepEqual(config.invalid, [
+    { slot: 1, reason: 'address' },
+    { slot: 2, reason: 'game' },
+  ]);
+  assert.equal(config.servers[0].type, 'barotrauma', 'a GameDig id off the list still works');
+  assert.equal(config.servers[1].type, 'valheim', 'empty: the default game');
+  assert.equal(config.pollIntervalMs, 60_000);
+  assert.equal(config.language, 'fr');
 });

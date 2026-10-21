@@ -1,177 +1,2800 @@
 {
   "manifest_version": 1,
   "type": "device",
-  "name": "Demo Devices Template",
+  "name": "Game Servers (GameDig)",
   "description": {
-    "en": "Starter template showing sensors, a switch, a dimmable light and a smart plug.",
-    "fr": "Template de démarrage : capteurs, interrupteur, lampe variable et prise connectée."
+    "en": "Valheim, Counter-Strike, ARK, Rust… and 300 more games: server status, players, arrivals.",
+    "fr": "Valheim, Counter-Strike, ARK, Rust… et 300 autres jeux : état du serveur, joueurs, arrivées.",
+    "de": "Valheim, Counter-Strike, ARK, Rust… und 300 weitere Spiele: Serverstatus, Spieler, Ankünfte.",
+    "es": "Valheim, Counter-Strike, ARK, Rust… y 300 juegos más: estado del servidor, jugadores, llegadas."
   },
   "version": "1.0.0",
-  "docker_image": "ghcr.io/gladysassistant/integration-template-js:1.0.0",
+  "docker_image": "ghcr.io/guim31/gladys-gamedig:1.0.0",
   "gladys_version": ">=5.1.0",
-  "cover_image": "https://raw.githubusercontent.com/GladysAssistant/integration-template-js/master/cover.png",
-  "categories": ["lighting", "security", "environment"],
+  "cover_image": "https://raw.githubusercontent.com/guim31/gladys-gamedig/main/cover.png",
+  "categories": ["multimedia", "services"],
   "transports": ["local", "cloud"],
   "config_schema": [
     {
       "key": "intro",
       "type": "section",
-      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "label": {
+        "en": "Your game servers",
+        "fr": "Vos serveurs de jeu",
+        "de": "Deine Spieleserver",
+        "es": "Sus servidores de juego"
+      },
       "description": {
-        "en": "The demo weather station reads real data from the free Open-Meteo API: pick the coordinates to observe. No account, no API key.",
-        "fr": "La station météo de démonstration lit de vraies données via l'API gratuite Open-Meteo : choisissez les coordonnées à observer. Pas de compte, pas de clé d'API."
+        "en": "Read like the server browser of the game, without any account, through GameDig (more than 300 games). At home or online. Up to four servers.",
+        "fr": "Lus comme le navigateur de serveurs du jeu, sans aucun compte, grâce à GameDig (plus de 300 jeux). À la maison ou en ligne. Jusqu'à quatre serveurs.",
+        "de": "Gelesen wie die Serverliste des Spiels, ohne Konto, über GameDig (mehr als 300 Spiele). Zu Hause oder online. Bis zu vier Server.",
+        "es": "Leídos como el navegador de servidores del juego, sin ninguna cuenta, gracias a GameDig (más de 300 juegos). En casa o en línea. Hasta cuatro servidores."
       },
       "links": [
         {
-          "url": "https://open-meteo.com/en/docs",
-          "label": { "en": "Open-Meteo documentation", "fr": "Documentation Open-Meteo" }
+          "url": "https://github.com/gamedig/node-gamedig/blob/master/GAMES_LIST.md",
+          "label": {
+            "en": "GameDig games list",
+            "fr": "Liste des jeux de GameDig",
+            "de": "Spieleliste von GameDig",
+            "es": "Lista de juegos de GameDig"
+          }
         }
       ]
     },
     {
-      "key": "latitude",
-      "type": "number",
-      "label": { "en": "Latitude", "fr": "Latitude" },
-      "description": {
-        "en": "Latitude used for the demo weather sensor.",
-        "fr": "Latitude utilisée par le capteur météo de démonstration."
-      },
-      "placeholder": { "en": "e.g. 48.8566", "fr": "ex. 48.8566" },
-      "required": true,
-      "default": 48.8566,
-      "min": -90,
-      "max": 90
+      "key": "server_1_section",
+      "type": "section",
+      "label": {
+        "en": "Server 1",
+        "fr": "Serveur 1",
+        "de": "Server 1",
+        "es": "Servidor 1"
+      }
     },
     {
-      "key": "longitude",
-      "type": "number",
-      "label": { "en": "Longitude", "fr": "Longitude" },
-      "description": {
-        "en": "Longitude used for the demo weather sensor.",
-        "fr": "Longitude utilisée par le capteur météo de démonstration."
-      },
-      "placeholder": { "en": "e.g. 2.3522", "fr": "ex. 2.3522" },
-      "required": true,
-      "default": 2.3522,
-      "min": -180,
-      "max": 180
-    },
-    {
-      "key": "unit",
+      "key": "server_1_game",
       "type": "select",
-      "label": { "en": "Temperature unit", "fr": "Unité de température" },
+      "label": {
+        "en": "Game",
+        "fr": "Jeu",
+        "de": "Spiel",
+        "es": "Juego"
+      },
       "required": false,
-      "default": "celsius",
+      "default": "valheim",
       "options": [
-        { "value": "celsius", "label": { "en": "Celsius", "fr": "Celsius" } },
-        { "value": "fahrenheit", "label": { "en": "Fahrenheit", "fr": "Fahrenheit" } }
+        {
+          "value": "valheim",
+          "label": {
+            "en": "Valheim",
+            "fr": "Valheim",
+            "de": "Valheim",
+            "es": "Valheim"
+          }
+        },
+        {
+          "value": "minecraft",
+          "label": {
+            "en": "Minecraft (Java Edition)",
+            "fr": "Minecraft (Java Edition)",
+            "de": "Minecraft (Java Edition)",
+            "es": "Minecraft (Java Edition)"
+          }
+        },
+        {
+          "value": "mbe",
+          "label": {
+            "en": "Minecraft (Bedrock Edition)",
+            "fr": "Minecraft (Bedrock Edition)",
+            "de": "Minecraft (Bedrock Edition)",
+            "es": "Minecraft (Bedrock Edition)"
+          }
+        },
+        {
+          "value": "counterstrike2",
+          "label": {
+            "en": "Counter-Strike 2",
+            "fr": "Counter-Strike 2",
+            "de": "Counter-Strike 2",
+            "es": "Counter-Strike 2"
+          }
+        },
+        {
+          "value": "css",
+          "label": {
+            "en": "Counter-Strike: Source",
+            "fr": "Counter-Strike: Source",
+            "de": "Counter-Strike: Source",
+            "es": "Counter-Strike: Source"
+          }
+        },
+        {
+          "value": "counterstrike16",
+          "label": {
+            "en": "Counter-Strike 1.6",
+            "fr": "Counter-Strike 1.6",
+            "de": "Counter-Strike 1.6",
+            "es": "Counter-Strike 1.6"
+          }
+        },
+        {
+          "value": "teamfortress2",
+          "label": {
+            "en": "Team Fortress 2",
+            "fr": "Team Fortress 2",
+            "de": "Team Fortress 2",
+            "es": "Team Fortress 2"
+          }
+        },
+        {
+          "value": "garrysmod",
+          "label": {
+            "en": "Garry's Mod",
+            "fr": "Garry's Mod",
+            "de": "Garry's Mod",
+            "es": "Garry's Mod"
+          }
+        },
+        {
+          "value": "l4d2",
+          "label": {
+            "en": "Left 4 Dead 2",
+            "fr": "Left 4 Dead 2",
+            "de": "Left 4 Dead 2",
+            "es": "Left 4 Dead 2"
+          }
+        },
+        {
+          "value": "rust",
+          "label": {
+            "en": "Rust",
+            "fr": "Rust",
+            "de": "Rust",
+            "es": "Rust"
+          }
+        },
+        {
+          "value": "ase",
+          "label": {
+            "en": "ARK: Survival Evolved",
+            "fr": "ARK: Survival Evolved",
+            "de": "ARK: Survival Evolved",
+            "es": "ARK: Survival Evolved"
+          }
+        },
+        {
+          "value": "asa",
+          "label": {
+            "en": "ARK: Survival Ascended",
+            "fr": "ARK: Survival Ascended",
+            "de": "ARK: Survival Ascended",
+            "es": "ARK: Survival Ascended"
+          }
+        },
+        {
+          "value": "satisfactory",
+          "label": {
+            "en": "Satisfactory",
+            "fr": "Satisfactory",
+            "de": "Satisfactory",
+            "es": "Satisfactory"
+          }
+        },
+        {
+          "value": "palworld",
+          "label": {
+            "en": "Palworld",
+            "fr": "Palworld",
+            "de": "Palworld",
+            "es": "Palworld"
+          }
+        },
+        {
+          "value": "terrariatshock",
+          "label": {
+            "en": "Terraria (TShock)",
+            "fr": "Terraria (TShock)",
+            "de": "Terraria (TShock)",
+            "es": "Terraria (TShock)"
+          }
+        },
+        {
+          "value": "sdtd",
+          "label": {
+            "en": "7 Days to Die",
+            "fr": "7 Days to Die",
+            "de": "7 Days to Die",
+            "es": "7 Days to Die"
+          }
+        },
+        {
+          "value": "projectzomboid",
+          "label": {
+            "en": "Project Zomboid",
+            "fr": "Project Zomboid",
+            "de": "Project Zomboid",
+            "es": "Project Zomboid"
+          }
+        },
+        {
+          "value": "vrising",
+          "label": {
+            "en": "V Rising",
+            "fr": "V Rising",
+            "de": "V Rising",
+            "es": "V Rising"
+          }
+        },
+        {
+          "value": "enshrouded",
+          "label": {
+            "en": "Enshrouded",
+            "fr": "Enshrouded",
+            "de": "Enshrouded",
+            "es": "Enshrouded"
+          }
+        },
+        {
+          "value": "sotf",
+          "label": {
+            "en": "Sons Of The Forest",
+            "fr": "Sons Of The Forest",
+            "de": "Sons Of The Forest",
+            "es": "Sons Of The Forest"
+          }
+        },
+        {
+          "value": "conanexiles",
+          "label": {
+            "en": "Conan Exiles",
+            "fr": "Conan Exiles",
+            "de": "Conan Exiles",
+            "es": "Conan Exiles"
+          }
+        },
+        {
+          "value": "dayz",
+          "label": {
+            "en": "DayZ",
+            "fr": "DayZ",
+            "de": "DayZ",
+            "es": "DayZ"
+          }
+        },
+        {
+          "value": "arma3",
+          "label": {
+            "en": "Arma 3",
+            "fr": "Arma 3",
+            "de": "Arma 3",
+            "es": "Arma 3"
+          }
+        },
+        {
+          "value": "factorio",
+          "label": {
+            "en": "Factorio",
+            "fr": "Factorio",
+            "de": "Factorio",
+            "es": "Factorio"
+          }
+        },
+        {
+          "value": "unturned",
+          "label": {
+            "en": "Unturned",
+            "fr": "Unturned",
+            "de": "Unturned",
+            "es": "Unturned"
+          }
+        },
+        {
+          "value": "spaceengineers",
+          "label": {
+            "en": "Space Engineers",
+            "fr": "Space Engineers",
+            "de": "Space Engineers",
+            "es": "Space Engineers"
+          }
+        },
+        {
+          "value": "dst",
+          "label": {
+            "en": "Don't Starve Together",
+            "fr": "Don't Starve Together",
+            "de": "Don't Starve Together",
+            "es": "Don't Starve Together"
+          }
+        },
+        {
+          "value": "corekeeper",
+          "label": {
+            "en": "Core Keeper",
+            "fr": "Core Keeper",
+            "de": "Core Keeper",
+            "es": "Core Keeper"
+          }
+        },
+        {
+          "value": "insurgencysandstorm",
+          "label": {
+            "en": "Insurgency: Sandstorm",
+            "fr": "Insurgency: Sandstorm",
+            "de": "Insurgency: Sandstorm",
+            "es": "Insurgency: Sandstorm"
+          }
+        },
+        {
+          "value": "squad",
+          "label": {
+            "en": "Squad",
+            "fr": "Squad",
+            "de": "Squad",
+            "es": "Squad"
+          }
+        },
+        {
+          "value": "ets2",
+          "label": {
+            "en": "Euro Truck Simulator 2",
+            "fr": "Euro Truck Simulator 2",
+            "de": "Euro Truck Simulator 2",
+            "es": "Euro Truck Simulator 2"
+          }
+        },
+        {
+          "value": "farmingsimulator25",
+          "label": {
+            "en": "Farming Simulator 25",
+            "fr": "Farming Simulator 25",
+            "de": "Farming Simulator 25",
+            "es": "Farming Simulator 25"
+          }
+        },
+        {
+          "value": "q3a",
+          "label": {
+            "en": "Quake III Arena",
+            "fr": "Quake III Arena",
+            "de": "Quake III Arena",
+            "es": "Quake III Arena"
+          }
+        },
+        {
+          "value": "openarena",
+          "label": {
+            "en": "OpenArena",
+            "fr": "OpenArena",
+            "de": "OpenArena",
+            "es": "OpenArena"
+          }
+        },
+        {
+          "value": "quakelive",
+          "label": {
+            "en": "Quake Live",
+            "fr": "Quake Live",
+            "de": "Quake Live",
+            "es": "Quake Live"
+          }
+        },
+        {
+          "value": "mumble",
+          "label": {
+            "en": "Mumble",
+            "fr": "Mumble",
+            "de": "Mumble",
+            "es": "Mumble"
+          }
+        },
+        {
+          "value": "other",
+          "label": {
+            "en": "Other (GameDig type)",
+            "fr": "Autre (type GameDig)",
+            "de": "Anderes (GameDig-Typ)",
+            "es": "Otro (tipo GameDig)"
+          }
+        }
       ]
     },
     {
-      "key": "poll_frequency",
-      "type": "number",
-      "label": { "en": "Refresh interval (s)", "fr": "Intervalle de rafraîchissement (s)" },
+      "key": "server_1_type",
+      "type": "string",
+      "label": {
+        "en": "GameDig type (game \"Other\")",
+        "fr": "Type GameDig (jeu « Autre »)",
+        "de": "GameDig-Typ (Spiel „Anderes“)",
+        "es": "Tipo GameDig (juego «Otro»)"
+      },
       "description": {
-        "en": "How often sensors are polled, in seconds (one minute minimum).",
-        "fr": "Fréquence d'interrogation des capteurs, en secondes (une minute minimum)."
+        "en": "The id of the GameDig games list, e.g. barotrauma, or protocol-valve.",
+        "fr": "L'identifiant de la liste des jeux de GameDig, ex. barotrauma, ou protocol-valve.",
+        "de": "Die Kennung aus der Spieleliste von GameDig, z. B. barotrauma oder protocol-valve.",
+        "es": "El identificador de la lista de juegos de GameDig, p. ej. barotrauma o protocol-valve."
+      },
+      "placeholder": {
+        "en": "e.g. barotrauma",
+        "fr": "ex. barotrauma",
+        "de": "z. B. barotrauma",
+        "es": "p. ej. barotrauma"
       },
       "required": false,
-      "default": 300,
-      "min": 60,
-      "max": 3600
+      "default": ""
+    },
+    {
+      "key": "server_1_address",
+      "type": "string",
+      "label": {
+        "en": "Address",
+        "fr": "Adresse",
+        "de": "Adresse",
+        "es": "Dirección"
+      },
+      "description": {
+        "en": "IP address or name, :port if not the default one of the game (game port or query port).",
+        "fr": "Adresse IP ou nom, :port s'il n'est pas celui par défaut du jeu (port de jeu ou de requête).",
+        "de": "IP-Adresse oder Name, :Port, falls nicht der Standard des Spiels (Spiel- oder Abfrageport).",
+        "es": "Dirección IP o nombre, :puerto si no es el predeterminado del juego (puerto de juego o de consulta)."
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20:2456",
+        "fr": "ex. 192.168.1.20:2456",
+        "de": "z. B. 192.168.1.20:2456",
+        "es": "p. ej. 192.168.1.20:2456"
+      },
+      "required": true,
+      "default": ""
+    },
+    {
+      "key": "server_1_name",
+      "type": "string",
+      "label": {
+        "en": "Name shown in Gladys",
+        "fr": "Nom affiché dans Gladys",
+        "de": "In Gladys angezeigter Name",
+        "es": "Nombre mostrado en Gladys"
+      },
+      "description": {
+        "en": "Empty: the game and the address.",
+        "fr": "Vide : le jeu et l'adresse.",
+        "de": "Leer: Spiel und Adresse.",
+        "es": "Vacío: el juego y la dirección."
+      },
+      "placeholder": {
+        "en": "e.g. Friends Valheim",
+        "fr": "ex. Valheim des copains",
+        "de": "z. B. Valheim mit Freunden",
+        "es": "p. ej. Valheim de los amigos"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_1_secret",
+      "type": "secret",
+      "label": {
+        "en": "Password or token (some games)",
+        "fr": "Mot de passe ou jeton (certains jeux)",
+        "de": "Passwort oder Token (manche Spiele)",
+        "es": "Contraseña o token (algunos juegos)"
+      },
+      "description": {
+        "en": "Only Palworld (admin password, REST API on), Terraria TShock and Farming Simulator (token), Satisfactory (optional token).",
+        "fr": "Seulement Palworld (mot de passe admin, API REST active), Terraria TShock et Farming Simulator (jeton), Satisfactory (jeton facultatif).",
+        "de": "Nur Palworld (Admin-Passwort, REST-API aktiv), Terraria TShock und Farming Simulator (Token), Satisfactory (optionaler Token).",
+        "es": "Solo Palworld (contraseña de administrador, API REST activa), Terraria TShock y Farming Simulator (token), Satisfactory (token opcional)."
+      },
+      "required": false
+    },
+    {
+      "key": "server_2_section",
+      "type": "section",
+      "label": {
+        "en": "Server 2",
+        "fr": "Serveur 2",
+        "de": "Server 2",
+        "es": "Servidor 2"
+      },
+      "description": {
+        "en": "Optional: leave the address empty if you have no other server.",
+        "fr": "Facultatif : laissez l'adresse vide si vous n'avez pas d'autre serveur.",
+        "de": "Optional: Lass die Adresse leer, wenn du keinen weiteren Server hast.",
+        "es": "Opcional: deje la dirección vacía si no tiene otro servidor."
+      }
+    },
+    {
+      "key": "server_2_game",
+      "type": "select",
+      "label": {
+        "en": "Game",
+        "fr": "Jeu",
+        "de": "Spiel",
+        "es": "Juego"
+      },
+      "required": false,
+      "default": "valheim",
+      "options": [
+        {
+          "value": "valheim",
+          "label": {
+            "en": "Valheim",
+            "fr": "Valheim",
+            "de": "Valheim",
+            "es": "Valheim"
+          }
+        },
+        {
+          "value": "minecraft",
+          "label": {
+            "en": "Minecraft (Java Edition)",
+            "fr": "Minecraft (Java Edition)",
+            "de": "Minecraft (Java Edition)",
+            "es": "Minecraft (Java Edition)"
+          }
+        },
+        {
+          "value": "mbe",
+          "label": {
+            "en": "Minecraft (Bedrock Edition)",
+            "fr": "Minecraft (Bedrock Edition)",
+            "de": "Minecraft (Bedrock Edition)",
+            "es": "Minecraft (Bedrock Edition)"
+          }
+        },
+        {
+          "value": "counterstrike2",
+          "label": {
+            "en": "Counter-Strike 2",
+            "fr": "Counter-Strike 2",
+            "de": "Counter-Strike 2",
+            "es": "Counter-Strike 2"
+          }
+        },
+        {
+          "value": "css",
+          "label": {
+            "en": "Counter-Strike: Source",
+            "fr": "Counter-Strike: Source",
+            "de": "Counter-Strike: Source",
+            "es": "Counter-Strike: Source"
+          }
+        },
+        {
+          "value": "counterstrike16",
+          "label": {
+            "en": "Counter-Strike 1.6",
+            "fr": "Counter-Strike 1.6",
+            "de": "Counter-Strike 1.6",
+            "es": "Counter-Strike 1.6"
+          }
+        },
+        {
+          "value": "teamfortress2",
+          "label": {
+            "en": "Team Fortress 2",
+            "fr": "Team Fortress 2",
+            "de": "Team Fortress 2",
+            "es": "Team Fortress 2"
+          }
+        },
+        {
+          "value": "garrysmod",
+          "label": {
+            "en": "Garry's Mod",
+            "fr": "Garry's Mod",
+            "de": "Garry's Mod",
+            "es": "Garry's Mod"
+          }
+        },
+        {
+          "value": "l4d2",
+          "label": {
+            "en": "Left 4 Dead 2",
+            "fr": "Left 4 Dead 2",
+            "de": "Left 4 Dead 2",
+            "es": "Left 4 Dead 2"
+          }
+        },
+        {
+          "value": "rust",
+          "label": {
+            "en": "Rust",
+            "fr": "Rust",
+            "de": "Rust",
+            "es": "Rust"
+          }
+        },
+        {
+          "value": "ase",
+          "label": {
+            "en": "ARK: Survival Evolved",
+            "fr": "ARK: Survival Evolved",
+            "de": "ARK: Survival Evolved",
+            "es": "ARK: Survival Evolved"
+          }
+        },
+        {
+          "value": "asa",
+          "label": {
+            "en": "ARK: Survival Ascended",
+            "fr": "ARK: Survival Ascended",
+            "de": "ARK: Survival Ascended",
+            "es": "ARK: Survival Ascended"
+          }
+        },
+        {
+          "value": "satisfactory",
+          "label": {
+            "en": "Satisfactory",
+            "fr": "Satisfactory",
+            "de": "Satisfactory",
+            "es": "Satisfactory"
+          }
+        },
+        {
+          "value": "palworld",
+          "label": {
+            "en": "Palworld",
+            "fr": "Palworld",
+            "de": "Palworld",
+            "es": "Palworld"
+          }
+        },
+        {
+          "value": "terrariatshock",
+          "label": {
+            "en": "Terraria (TShock)",
+            "fr": "Terraria (TShock)",
+            "de": "Terraria (TShock)",
+            "es": "Terraria (TShock)"
+          }
+        },
+        {
+          "value": "sdtd",
+          "label": {
+            "en": "7 Days to Die",
+            "fr": "7 Days to Die",
+            "de": "7 Days to Die",
+            "es": "7 Days to Die"
+          }
+        },
+        {
+          "value": "projectzomboid",
+          "label": {
+            "en": "Project Zomboid",
+            "fr": "Project Zomboid",
+            "de": "Project Zomboid",
+            "es": "Project Zomboid"
+          }
+        },
+        {
+          "value": "vrising",
+          "label": {
+            "en": "V Rising",
+            "fr": "V Rising",
+            "de": "V Rising",
+            "es": "V Rising"
+          }
+        },
+        {
+          "value": "enshrouded",
+          "label": {
+            "en": "Enshrouded",
+            "fr": "Enshrouded",
+            "de": "Enshrouded",
+            "es": "Enshrouded"
+          }
+        },
+        {
+          "value": "sotf",
+          "label": {
+            "en": "Sons Of The Forest",
+            "fr": "Sons Of The Forest",
+            "de": "Sons Of The Forest",
+            "es": "Sons Of The Forest"
+          }
+        },
+        {
+          "value": "conanexiles",
+          "label": {
+            "en": "Conan Exiles",
+            "fr": "Conan Exiles",
+            "de": "Conan Exiles",
+            "es": "Conan Exiles"
+          }
+        },
+        {
+          "value": "dayz",
+          "label": {
+            "en": "DayZ",
+            "fr": "DayZ",
+            "de": "DayZ",
+            "es": "DayZ"
+          }
+        },
+        {
+          "value": "arma3",
+          "label": {
+            "en": "Arma 3",
+            "fr": "Arma 3",
+            "de": "Arma 3",
+            "es": "Arma 3"
+          }
+        },
+        {
+          "value": "factorio",
+          "label": {
+            "en": "Factorio",
+            "fr": "Factorio",
+            "de": "Factorio",
+            "es": "Factorio"
+          }
+        },
+        {
+          "value": "unturned",
+          "label": {
+            "en": "Unturned",
+            "fr": "Unturned",
+            "de": "Unturned",
+            "es": "Unturned"
+          }
+        },
+        {
+          "value": "spaceengineers",
+          "label": {
+            "en": "Space Engineers",
+            "fr": "Space Engineers",
+            "de": "Space Engineers",
+            "es": "Space Engineers"
+          }
+        },
+        {
+          "value": "dst",
+          "label": {
+            "en": "Don't Starve Together",
+            "fr": "Don't Starve Together",
+            "de": "Don't Starve Together",
+            "es": "Don't Starve Together"
+          }
+        },
+        {
+          "value": "corekeeper",
+          "label": {
+            "en": "Core Keeper",
+            "fr": "Core Keeper",
+            "de": "Core Keeper",
+            "es": "Core Keeper"
+          }
+        },
+        {
+          "value": "insurgencysandstorm",
+          "label": {
+            "en": "Insurgency: Sandstorm",
+            "fr": "Insurgency: Sandstorm",
+            "de": "Insurgency: Sandstorm",
+            "es": "Insurgency: Sandstorm"
+          }
+        },
+        {
+          "value": "squad",
+          "label": {
+            "en": "Squad",
+            "fr": "Squad",
+            "de": "Squad",
+            "es": "Squad"
+          }
+        },
+        {
+          "value": "ets2",
+          "label": {
+            "en": "Euro Truck Simulator 2",
+            "fr": "Euro Truck Simulator 2",
+            "de": "Euro Truck Simulator 2",
+            "es": "Euro Truck Simulator 2"
+          }
+        },
+        {
+          "value": "farmingsimulator25",
+          "label": {
+            "en": "Farming Simulator 25",
+            "fr": "Farming Simulator 25",
+            "de": "Farming Simulator 25",
+            "es": "Farming Simulator 25"
+          }
+        },
+        {
+          "value": "q3a",
+          "label": {
+            "en": "Quake III Arena",
+            "fr": "Quake III Arena",
+            "de": "Quake III Arena",
+            "es": "Quake III Arena"
+          }
+        },
+        {
+          "value": "openarena",
+          "label": {
+            "en": "OpenArena",
+            "fr": "OpenArena",
+            "de": "OpenArena",
+            "es": "OpenArena"
+          }
+        },
+        {
+          "value": "quakelive",
+          "label": {
+            "en": "Quake Live",
+            "fr": "Quake Live",
+            "de": "Quake Live",
+            "es": "Quake Live"
+          }
+        },
+        {
+          "value": "mumble",
+          "label": {
+            "en": "Mumble",
+            "fr": "Mumble",
+            "de": "Mumble",
+            "es": "Mumble"
+          }
+        },
+        {
+          "value": "other",
+          "label": {
+            "en": "Other (GameDig type)",
+            "fr": "Autre (type GameDig)",
+            "de": "Anderes (GameDig-Typ)",
+            "es": "Otro (tipo GameDig)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_2_type",
+      "type": "string",
+      "label": {
+        "en": "GameDig type (game \"Other\")",
+        "fr": "Type GameDig (jeu « Autre »)",
+        "de": "GameDig-Typ (Spiel „Anderes“)",
+        "es": "Tipo GameDig (juego «Otro»)"
+      },
+      "description": {
+        "en": "The id of the GameDig games list, e.g. barotrauma, or protocol-valve.",
+        "fr": "L'identifiant de la liste des jeux de GameDig, ex. barotrauma, ou protocol-valve.",
+        "de": "Die Kennung aus der Spieleliste von GameDig, z. B. barotrauma oder protocol-valve.",
+        "es": "El identificador de la lista de juegos de GameDig, p. ej. barotrauma o protocol-valve."
+      },
+      "placeholder": {
+        "en": "e.g. barotrauma",
+        "fr": "ex. barotrauma",
+        "de": "z. B. barotrauma",
+        "es": "p. ej. barotrauma"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_2_address",
+      "type": "string",
+      "label": {
+        "en": "Address",
+        "fr": "Adresse",
+        "de": "Adresse",
+        "es": "Dirección"
+      },
+      "description": {
+        "en": "IP address or name, :port if not the default one of the game (game port or query port).",
+        "fr": "Adresse IP ou nom, :port s'il n'est pas celui par défaut du jeu (port de jeu ou de requête).",
+        "de": "IP-Adresse oder Name, :Port, falls nicht der Standard des Spiels (Spiel- oder Abfrageport).",
+        "es": "Dirección IP o nombre, :puerto si no es el predeterminado del juego (puerto de juego o de consulta)."
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20:2456",
+        "fr": "ex. 192.168.1.20:2456",
+        "de": "z. B. 192.168.1.20:2456",
+        "es": "p. ej. 192.168.1.20:2456"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_2_name",
+      "type": "string",
+      "label": {
+        "en": "Name shown in Gladys",
+        "fr": "Nom affiché dans Gladys",
+        "de": "In Gladys angezeigter Name",
+        "es": "Nombre mostrado en Gladys"
+      },
+      "description": {
+        "en": "Empty: the game and the address.",
+        "fr": "Vide : le jeu et l'adresse.",
+        "de": "Leer: Spiel und Adresse.",
+        "es": "Vacío: el juego y la dirección."
+      },
+      "placeholder": {
+        "en": "e.g. Friends Valheim",
+        "fr": "ex. Valheim des copains",
+        "de": "z. B. Valheim mit Freunden",
+        "es": "p. ej. Valheim de los amigos"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_2_secret",
+      "type": "secret",
+      "label": {
+        "en": "Password or token (some games)",
+        "fr": "Mot de passe ou jeton (certains jeux)",
+        "de": "Passwort oder Token (manche Spiele)",
+        "es": "Contraseña o token (algunos juegos)"
+      },
+      "description": {
+        "en": "Only Palworld (admin password, REST API on), Terraria TShock and Farming Simulator (token), Satisfactory (optional token).",
+        "fr": "Seulement Palworld (mot de passe admin, API REST active), Terraria TShock et Farming Simulator (jeton), Satisfactory (jeton facultatif).",
+        "de": "Nur Palworld (Admin-Passwort, REST-API aktiv), Terraria TShock und Farming Simulator (Token), Satisfactory (optionaler Token).",
+        "es": "Solo Palworld (contraseña de administrador, API REST activa), Terraria TShock y Farming Simulator (token), Satisfactory (token opcional)."
+      },
+      "required": false
+    },
+    {
+      "key": "server_3_section",
+      "type": "section",
+      "label": {
+        "en": "Server 3",
+        "fr": "Serveur 3",
+        "de": "Server 3",
+        "es": "Servidor 3"
+      },
+      "description": {
+        "en": "Optional: leave the address empty if you have no other server.",
+        "fr": "Facultatif : laissez l'adresse vide si vous n'avez pas d'autre serveur.",
+        "de": "Optional: Lass die Adresse leer, wenn du keinen weiteren Server hast.",
+        "es": "Opcional: deje la dirección vacía si no tiene otro servidor."
+      }
+    },
+    {
+      "key": "server_3_game",
+      "type": "select",
+      "label": {
+        "en": "Game",
+        "fr": "Jeu",
+        "de": "Spiel",
+        "es": "Juego"
+      },
+      "required": false,
+      "default": "valheim",
+      "options": [
+        {
+          "value": "valheim",
+          "label": {
+            "en": "Valheim",
+            "fr": "Valheim",
+            "de": "Valheim",
+            "es": "Valheim"
+          }
+        },
+        {
+          "value": "minecraft",
+          "label": {
+            "en": "Minecraft (Java Edition)",
+            "fr": "Minecraft (Java Edition)",
+            "de": "Minecraft (Java Edition)",
+            "es": "Minecraft (Java Edition)"
+          }
+        },
+        {
+          "value": "mbe",
+          "label": {
+            "en": "Minecraft (Bedrock Edition)",
+            "fr": "Minecraft (Bedrock Edition)",
+            "de": "Minecraft (Bedrock Edition)",
+            "es": "Minecraft (Bedrock Edition)"
+          }
+        },
+        {
+          "value": "counterstrike2",
+          "label": {
+            "en": "Counter-Strike 2",
+            "fr": "Counter-Strike 2",
+            "de": "Counter-Strike 2",
+            "es": "Counter-Strike 2"
+          }
+        },
+        {
+          "value": "css",
+          "label": {
+            "en": "Counter-Strike: Source",
+            "fr": "Counter-Strike: Source",
+            "de": "Counter-Strike: Source",
+            "es": "Counter-Strike: Source"
+          }
+        },
+        {
+          "value": "counterstrike16",
+          "label": {
+            "en": "Counter-Strike 1.6",
+            "fr": "Counter-Strike 1.6",
+            "de": "Counter-Strike 1.6",
+            "es": "Counter-Strike 1.6"
+          }
+        },
+        {
+          "value": "teamfortress2",
+          "label": {
+            "en": "Team Fortress 2",
+            "fr": "Team Fortress 2",
+            "de": "Team Fortress 2",
+            "es": "Team Fortress 2"
+          }
+        },
+        {
+          "value": "garrysmod",
+          "label": {
+            "en": "Garry's Mod",
+            "fr": "Garry's Mod",
+            "de": "Garry's Mod",
+            "es": "Garry's Mod"
+          }
+        },
+        {
+          "value": "l4d2",
+          "label": {
+            "en": "Left 4 Dead 2",
+            "fr": "Left 4 Dead 2",
+            "de": "Left 4 Dead 2",
+            "es": "Left 4 Dead 2"
+          }
+        },
+        {
+          "value": "rust",
+          "label": {
+            "en": "Rust",
+            "fr": "Rust",
+            "de": "Rust",
+            "es": "Rust"
+          }
+        },
+        {
+          "value": "ase",
+          "label": {
+            "en": "ARK: Survival Evolved",
+            "fr": "ARK: Survival Evolved",
+            "de": "ARK: Survival Evolved",
+            "es": "ARK: Survival Evolved"
+          }
+        },
+        {
+          "value": "asa",
+          "label": {
+            "en": "ARK: Survival Ascended",
+            "fr": "ARK: Survival Ascended",
+            "de": "ARK: Survival Ascended",
+            "es": "ARK: Survival Ascended"
+          }
+        },
+        {
+          "value": "satisfactory",
+          "label": {
+            "en": "Satisfactory",
+            "fr": "Satisfactory",
+            "de": "Satisfactory",
+            "es": "Satisfactory"
+          }
+        },
+        {
+          "value": "palworld",
+          "label": {
+            "en": "Palworld",
+            "fr": "Palworld",
+            "de": "Palworld",
+            "es": "Palworld"
+          }
+        },
+        {
+          "value": "terrariatshock",
+          "label": {
+            "en": "Terraria (TShock)",
+            "fr": "Terraria (TShock)",
+            "de": "Terraria (TShock)",
+            "es": "Terraria (TShock)"
+          }
+        },
+        {
+          "value": "sdtd",
+          "label": {
+            "en": "7 Days to Die",
+            "fr": "7 Days to Die",
+            "de": "7 Days to Die",
+            "es": "7 Days to Die"
+          }
+        },
+        {
+          "value": "projectzomboid",
+          "label": {
+            "en": "Project Zomboid",
+            "fr": "Project Zomboid",
+            "de": "Project Zomboid",
+            "es": "Project Zomboid"
+          }
+        },
+        {
+          "value": "vrising",
+          "label": {
+            "en": "V Rising",
+            "fr": "V Rising",
+            "de": "V Rising",
+            "es": "V Rising"
+          }
+        },
+        {
+          "value": "enshrouded",
+          "label": {
+            "en": "Enshrouded",
+            "fr": "Enshrouded",
+            "de": "Enshrouded",
+            "es": "Enshrouded"
+          }
+        },
+        {
+          "value": "sotf",
+          "label": {
+            "en": "Sons Of The Forest",
+            "fr": "Sons Of The Forest",
+            "de": "Sons Of The Forest",
+            "es": "Sons Of The Forest"
+          }
+        },
+        {
+          "value": "conanexiles",
+          "label": {
+            "en": "Conan Exiles",
+            "fr": "Conan Exiles",
+            "de": "Conan Exiles",
+            "es": "Conan Exiles"
+          }
+        },
+        {
+          "value": "dayz",
+          "label": {
+            "en": "DayZ",
+            "fr": "DayZ",
+            "de": "DayZ",
+            "es": "DayZ"
+          }
+        },
+        {
+          "value": "arma3",
+          "label": {
+            "en": "Arma 3",
+            "fr": "Arma 3",
+            "de": "Arma 3",
+            "es": "Arma 3"
+          }
+        },
+        {
+          "value": "factorio",
+          "label": {
+            "en": "Factorio",
+            "fr": "Factorio",
+            "de": "Factorio",
+            "es": "Factorio"
+          }
+        },
+        {
+          "value": "unturned",
+          "label": {
+            "en": "Unturned",
+            "fr": "Unturned",
+            "de": "Unturned",
+            "es": "Unturned"
+          }
+        },
+        {
+          "value": "spaceengineers",
+          "label": {
+            "en": "Space Engineers",
+            "fr": "Space Engineers",
+            "de": "Space Engineers",
+            "es": "Space Engineers"
+          }
+        },
+        {
+          "value": "dst",
+          "label": {
+            "en": "Don't Starve Together",
+            "fr": "Don't Starve Together",
+            "de": "Don't Starve Together",
+            "es": "Don't Starve Together"
+          }
+        },
+        {
+          "value": "corekeeper",
+          "label": {
+            "en": "Core Keeper",
+            "fr": "Core Keeper",
+            "de": "Core Keeper",
+            "es": "Core Keeper"
+          }
+        },
+        {
+          "value": "insurgencysandstorm",
+          "label": {
+            "en": "Insurgency: Sandstorm",
+            "fr": "Insurgency: Sandstorm",
+            "de": "Insurgency: Sandstorm",
+            "es": "Insurgency: Sandstorm"
+          }
+        },
+        {
+          "value": "squad",
+          "label": {
+            "en": "Squad",
+            "fr": "Squad",
+            "de": "Squad",
+            "es": "Squad"
+          }
+        },
+        {
+          "value": "ets2",
+          "label": {
+            "en": "Euro Truck Simulator 2",
+            "fr": "Euro Truck Simulator 2",
+            "de": "Euro Truck Simulator 2",
+            "es": "Euro Truck Simulator 2"
+          }
+        },
+        {
+          "value": "farmingsimulator25",
+          "label": {
+            "en": "Farming Simulator 25",
+            "fr": "Farming Simulator 25",
+            "de": "Farming Simulator 25",
+            "es": "Farming Simulator 25"
+          }
+        },
+        {
+          "value": "q3a",
+          "label": {
+            "en": "Quake III Arena",
+            "fr": "Quake III Arena",
+            "de": "Quake III Arena",
+            "es": "Quake III Arena"
+          }
+        },
+        {
+          "value": "openarena",
+          "label": {
+            "en": "OpenArena",
+            "fr": "OpenArena",
+            "de": "OpenArena",
+            "es": "OpenArena"
+          }
+        },
+        {
+          "value": "quakelive",
+          "label": {
+            "en": "Quake Live",
+            "fr": "Quake Live",
+            "de": "Quake Live",
+            "es": "Quake Live"
+          }
+        },
+        {
+          "value": "mumble",
+          "label": {
+            "en": "Mumble",
+            "fr": "Mumble",
+            "de": "Mumble",
+            "es": "Mumble"
+          }
+        },
+        {
+          "value": "other",
+          "label": {
+            "en": "Other (GameDig type)",
+            "fr": "Autre (type GameDig)",
+            "de": "Anderes (GameDig-Typ)",
+            "es": "Otro (tipo GameDig)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_3_type",
+      "type": "string",
+      "label": {
+        "en": "GameDig type (game \"Other\")",
+        "fr": "Type GameDig (jeu « Autre »)",
+        "de": "GameDig-Typ (Spiel „Anderes“)",
+        "es": "Tipo GameDig (juego «Otro»)"
+      },
+      "description": {
+        "en": "The id of the GameDig games list, e.g. barotrauma, or protocol-valve.",
+        "fr": "L'identifiant de la liste des jeux de GameDig, ex. barotrauma, ou protocol-valve.",
+        "de": "Die Kennung aus der Spieleliste von GameDig, z. B. barotrauma oder protocol-valve.",
+        "es": "El identificador de la lista de juegos de GameDig, p. ej. barotrauma o protocol-valve."
+      },
+      "placeholder": {
+        "en": "e.g. barotrauma",
+        "fr": "ex. barotrauma",
+        "de": "z. B. barotrauma",
+        "es": "p. ej. barotrauma"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_3_address",
+      "type": "string",
+      "label": {
+        "en": "Address",
+        "fr": "Adresse",
+        "de": "Adresse",
+        "es": "Dirección"
+      },
+      "description": {
+        "en": "IP address or name, :port if not the default one of the game (game port or query port).",
+        "fr": "Adresse IP ou nom, :port s'il n'est pas celui par défaut du jeu (port de jeu ou de requête).",
+        "de": "IP-Adresse oder Name, :Port, falls nicht der Standard des Spiels (Spiel- oder Abfrageport).",
+        "es": "Dirección IP o nombre, :puerto si no es el predeterminado del juego (puerto de juego o de consulta)."
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20:2456",
+        "fr": "ex. 192.168.1.20:2456",
+        "de": "z. B. 192.168.1.20:2456",
+        "es": "p. ej. 192.168.1.20:2456"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_3_name",
+      "type": "string",
+      "label": {
+        "en": "Name shown in Gladys",
+        "fr": "Nom affiché dans Gladys",
+        "de": "In Gladys angezeigter Name",
+        "es": "Nombre mostrado en Gladys"
+      },
+      "description": {
+        "en": "Empty: the game and the address.",
+        "fr": "Vide : le jeu et l'adresse.",
+        "de": "Leer: Spiel und Adresse.",
+        "es": "Vacío: el juego y la dirección."
+      },
+      "placeholder": {
+        "en": "e.g. Friends Valheim",
+        "fr": "ex. Valheim des copains",
+        "de": "z. B. Valheim mit Freunden",
+        "es": "p. ej. Valheim de los amigos"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_3_secret",
+      "type": "secret",
+      "label": {
+        "en": "Password or token (some games)",
+        "fr": "Mot de passe ou jeton (certains jeux)",
+        "de": "Passwort oder Token (manche Spiele)",
+        "es": "Contraseña o token (algunos juegos)"
+      },
+      "description": {
+        "en": "Only Palworld (admin password, REST API on), Terraria TShock and Farming Simulator (token), Satisfactory (optional token).",
+        "fr": "Seulement Palworld (mot de passe admin, API REST active), Terraria TShock et Farming Simulator (jeton), Satisfactory (jeton facultatif).",
+        "de": "Nur Palworld (Admin-Passwort, REST-API aktiv), Terraria TShock und Farming Simulator (Token), Satisfactory (optionaler Token).",
+        "es": "Solo Palworld (contraseña de administrador, API REST activa), Terraria TShock y Farming Simulator (token), Satisfactory (token opcional)."
+      },
+      "required": false
+    },
+    {
+      "key": "server_4_section",
+      "type": "section",
+      "label": {
+        "en": "Server 4",
+        "fr": "Serveur 4",
+        "de": "Server 4",
+        "es": "Servidor 4"
+      },
+      "description": {
+        "en": "Optional: leave the address empty if you have no other server.",
+        "fr": "Facultatif : laissez l'adresse vide si vous n'avez pas d'autre serveur.",
+        "de": "Optional: Lass die Adresse leer, wenn du keinen weiteren Server hast.",
+        "es": "Opcional: deje la dirección vacía si no tiene otro servidor."
+      }
+    },
+    {
+      "key": "server_4_game",
+      "type": "select",
+      "label": {
+        "en": "Game",
+        "fr": "Jeu",
+        "de": "Spiel",
+        "es": "Juego"
+      },
+      "required": false,
+      "default": "valheim",
+      "options": [
+        {
+          "value": "valheim",
+          "label": {
+            "en": "Valheim",
+            "fr": "Valheim",
+            "de": "Valheim",
+            "es": "Valheim"
+          }
+        },
+        {
+          "value": "minecraft",
+          "label": {
+            "en": "Minecraft (Java Edition)",
+            "fr": "Minecraft (Java Edition)",
+            "de": "Minecraft (Java Edition)",
+            "es": "Minecraft (Java Edition)"
+          }
+        },
+        {
+          "value": "mbe",
+          "label": {
+            "en": "Minecraft (Bedrock Edition)",
+            "fr": "Minecraft (Bedrock Edition)",
+            "de": "Minecraft (Bedrock Edition)",
+            "es": "Minecraft (Bedrock Edition)"
+          }
+        },
+        {
+          "value": "counterstrike2",
+          "label": {
+            "en": "Counter-Strike 2",
+            "fr": "Counter-Strike 2",
+            "de": "Counter-Strike 2",
+            "es": "Counter-Strike 2"
+          }
+        },
+        {
+          "value": "css",
+          "label": {
+            "en": "Counter-Strike: Source",
+            "fr": "Counter-Strike: Source",
+            "de": "Counter-Strike: Source",
+            "es": "Counter-Strike: Source"
+          }
+        },
+        {
+          "value": "counterstrike16",
+          "label": {
+            "en": "Counter-Strike 1.6",
+            "fr": "Counter-Strike 1.6",
+            "de": "Counter-Strike 1.6",
+            "es": "Counter-Strike 1.6"
+          }
+        },
+        {
+          "value": "teamfortress2",
+          "label": {
+            "en": "Team Fortress 2",
+            "fr": "Team Fortress 2",
+            "de": "Team Fortress 2",
+            "es": "Team Fortress 2"
+          }
+        },
+        {
+          "value": "garrysmod",
+          "label": {
+            "en": "Garry's Mod",
+            "fr": "Garry's Mod",
+            "de": "Garry's Mod",
+            "es": "Garry's Mod"
+          }
+        },
+        {
+          "value": "l4d2",
+          "label": {
+            "en": "Left 4 Dead 2",
+            "fr": "Left 4 Dead 2",
+            "de": "Left 4 Dead 2",
+            "es": "Left 4 Dead 2"
+          }
+        },
+        {
+          "value": "rust",
+          "label": {
+            "en": "Rust",
+            "fr": "Rust",
+            "de": "Rust",
+            "es": "Rust"
+          }
+        },
+        {
+          "value": "ase",
+          "label": {
+            "en": "ARK: Survival Evolved",
+            "fr": "ARK: Survival Evolved",
+            "de": "ARK: Survival Evolved",
+            "es": "ARK: Survival Evolved"
+          }
+        },
+        {
+          "value": "asa",
+          "label": {
+            "en": "ARK: Survival Ascended",
+            "fr": "ARK: Survival Ascended",
+            "de": "ARK: Survival Ascended",
+            "es": "ARK: Survival Ascended"
+          }
+        },
+        {
+          "value": "satisfactory",
+          "label": {
+            "en": "Satisfactory",
+            "fr": "Satisfactory",
+            "de": "Satisfactory",
+            "es": "Satisfactory"
+          }
+        },
+        {
+          "value": "palworld",
+          "label": {
+            "en": "Palworld",
+            "fr": "Palworld",
+            "de": "Palworld",
+            "es": "Palworld"
+          }
+        },
+        {
+          "value": "terrariatshock",
+          "label": {
+            "en": "Terraria (TShock)",
+            "fr": "Terraria (TShock)",
+            "de": "Terraria (TShock)",
+            "es": "Terraria (TShock)"
+          }
+        },
+        {
+          "value": "sdtd",
+          "label": {
+            "en": "7 Days to Die",
+            "fr": "7 Days to Die",
+            "de": "7 Days to Die",
+            "es": "7 Days to Die"
+          }
+        },
+        {
+          "value": "projectzomboid",
+          "label": {
+            "en": "Project Zomboid",
+            "fr": "Project Zomboid",
+            "de": "Project Zomboid",
+            "es": "Project Zomboid"
+          }
+        },
+        {
+          "value": "vrising",
+          "label": {
+            "en": "V Rising",
+            "fr": "V Rising",
+            "de": "V Rising",
+            "es": "V Rising"
+          }
+        },
+        {
+          "value": "enshrouded",
+          "label": {
+            "en": "Enshrouded",
+            "fr": "Enshrouded",
+            "de": "Enshrouded",
+            "es": "Enshrouded"
+          }
+        },
+        {
+          "value": "sotf",
+          "label": {
+            "en": "Sons Of The Forest",
+            "fr": "Sons Of The Forest",
+            "de": "Sons Of The Forest",
+            "es": "Sons Of The Forest"
+          }
+        },
+        {
+          "value": "conanexiles",
+          "label": {
+            "en": "Conan Exiles",
+            "fr": "Conan Exiles",
+            "de": "Conan Exiles",
+            "es": "Conan Exiles"
+          }
+        },
+        {
+          "value": "dayz",
+          "label": {
+            "en": "DayZ",
+            "fr": "DayZ",
+            "de": "DayZ",
+            "es": "DayZ"
+          }
+        },
+        {
+          "value": "arma3",
+          "label": {
+            "en": "Arma 3",
+            "fr": "Arma 3",
+            "de": "Arma 3",
+            "es": "Arma 3"
+          }
+        },
+        {
+          "value": "factorio",
+          "label": {
+            "en": "Factorio",
+            "fr": "Factorio",
+            "de": "Factorio",
+            "es": "Factorio"
+          }
+        },
+        {
+          "value": "unturned",
+          "label": {
+            "en": "Unturned",
+            "fr": "Unturned",
+            "de": "Unturned",
+            "es": "Unturned"
+          }
+        },
+        {
+          "value": "spaceengineers",
+          "label": {
+            "en": "Space Engineers",
+            "fr": "Space Engineers",
+            "de": "Space Engineers",
+            "es": "Space Engineers"
+          }
+        },
+        {
+          "value": "dst",
+          "label": {
+            "en": "Don't Starve Together",
+            "fr": "Don't Starve Together",
+            "de": "Don't Starve Together",
+            "es": "Don't Starve Together"
+          }
+        },
+        {
+          "value": "corekeeper",
+          "label": {
+            "en": "Core Keeper",
+            "fr": "Core Keeper",
+            "de": "Core Keeper",
+            "es": "Core Keeper"
+          }
+        },
+        {
+          "value": "insurgencysandstorm",
+          "label": {
+            "en": "Insurgency: Sandstorm",
+            "fr": "Insurgency: Sandstorm",
+            "de": "Insurgency: Sandstorm",
+            "es": "Insurgency: Sandstorm"
+          }
+        },
+        {
+          "value": "squad",
+          "label": {
+            "en": "Squad",
+            "fr": "Squad",
+            "de": "Squad",
+            "es": "Squad"
+          }
+        },
+        {
+          "value": "ets2",
+          "label": {
+            "en": "Euro Truck Simulator 2",
+            "fr": "Euro Truck Simulator 2",
+            "de": "Euro Truck Simulator 2",
+            "es": "Euro Truck Simulator 2"
+          }
+        },
+        {
+          "value": "farmingsimulator25",
+          "label": {
+            "en": "Farming Simulator 25",
+            "fr": "Farming Simulator 25",
+            "de": "Farming Simulator 25",
+            "es": "Farming Simulator 25"
+          }
+        },
+        {
+          "value": "q3a",
+          "label": {
+            "en": "Quake III Arena",
+            "fr": "Quake III Arena",
+            "de": "Quake III Arena",
+            "es": "Quake III Arena"
+          }
+        },
+        {
+          "value": "openarena",
+          "label": {
+            "en": "OpenArena",
+            "fr": "OpenArena",
+            "de": "OpenArena",
+            "es": "OpenArena"
+          }
+        },
+        {
+          "value": "quakelive",
+          "label": {
+            "en": "Quake Live",
+            "fr": "Quake Live",
+            "de": "Quake Live",
+            "es": "Quake Live"
+          }
+        },
+        {
+          "value": "mumble",
+          "label": {
+            "en": "Mumble",
+            "fr": "Mumble",
+            "de": "Mumble",
+            "es": "Mumble"
+          }
+        },
+        {
+          "value": "other",
+          "label": {
+            "en": "Other (GameDig type)",
+            "fr": "Autre (type GameDig)",
+            "de": "Anderes (GameDig-Typ)",
+            "es": "Otro (tipo GameDig)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_4_type",
+      "type": "string",
+      "label": {
+        "en": "GameDig type (game \"Other\")",
+        "fr": "Type GameDig (jeu « Autre »)",
+        "de": "GameDig-Typ (Spiel „Anderes“)",
+        "es": "Tipo GameDig (juego «Otro»)"
+      },
+      "description": {
+        "en": "The id of the GameDig games list, e.g. barotrauma, or protocol-valve.",
+        "fr": "L'identifiant de la liste des jeux de GameDig, ex. barotrauma, ou protocol-valve.",
+        "de": "Die Kennung aus der Spieleliste von GameDig, z. B. barotrauma oder protocol-valve.",
+        "es": "El identificador de la lista de juegos de GameDig, p. ej. barotrauma o protocol-valve."
+      },
+      "placeholder": {
+        "en": "e.g. barotrauma",
+        "fr": "ex. barotrauma",
+        "de": "z. B. barotrauma",
+        "es": "p. ej. barotrauma"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_4_address",
+      "type": "string",
+      "label": {
+        "en": "Address",
+        "fr": "Adresse",
+        "de": "Adresse",
+        "es": "Dirección"
+      },
+      "description": {
+        "en": "IP address or name, :port if not the default one of the game (game port or query port).",
+        "fr": "Adresse IP ou nom, :port s'il n'est pas celui par défaut du jeu (port de jeu ou de requête).",
+        "de": "IP-Adresse oder Name, :Port, falls nicht der Standard des Spiels (Spiel- oder Abfrageport).",
+        "es": "Dirección IP o nombre, :puerto si no es el predeterminado del juego (puerto de juego o de consulta)."
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20:2456",
+        "fr": "ex. 192.168.1.20:2456",
+        "de": "z. B. 192.168.1.20:2456",
+        "es": "p. ej. 192.168.1.20:2456"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_4_name",
+      "type": "string",
+      "label": {
+        "en": "Name shown in Gladys",
+        "fr": "Nom affiché dans Gladys",
+        "de": "In Gladys angezeigter Name",
+        "es": "Nombre mostrado en Gladys"
+      },
+      "description": {
+        "en": "Empty: the game and the address.",
+        "fr": "Vide : le jeu et l'adresse.",
+        "de": "Leer: Spiel und Adresse.",
+        "es": "Vacío: el juego y la dirección."
+      },
+      "placeholder": {
+        "en": "e.g. Friends Valheim",
+        "fr": "ex. Valheim des copains",
+        "de": "z. B. Valheim mit Freunden",
+        "es": "p. ej. Valheim de los amigos"
+      },
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "server_4_secret",
+      "type": "secret",
+      "label": {
+        "en": "Password or token (some games)",
+        "fr": "Mot de passe ou jeton (certains jeux)",
+        "de": "Passwort oder Token (manche Spiele)",
+        "es": "Contraseña o token (algunos juegos)"
+      },
+      "description": {
+        "en": "Only Palworld (admin password, REST API on), Terraria TShock and Farming Simulator (token), Satisfactory (optional token).",
+        "fr": "Seulement Palworld (mot de passe admin, API REST active), Terraria TShock et Farming Simulator (jeton), Satisfactory (jeton facultatif).",
+        "de": "Nur Palworld (Admin-Passwort, REST-API aktiv), Terraria TShock und Farming Simulator (Token), Satisfactory (optionaler Token).",
+        "es": "Solo Palworld (contraseña de administrador, API REST activa), Terraria TShock y Farming Simulator (token), Satisfactory (token opcional)."
+      },
+      "required": false
+    },
+    {
+      "key": "general",
+      "type": "section",
+      "label": {
+        "en": "Readings",
+        "fr": "Lectures",
+        "de": "Abfragen",
+        "es": "Lecturas"
+      }
+    },
+    {
+      "key": "poll_interval",
+      "type": "select",
+      "label": {
+        "en": "Reading interval",
+        "fr": "Intervalle de lecture",
+        "de": "Abfrageintervall",
+        "es": "Intervalo de lectura"
+      },
+      "description": {
+        "en": "How often each server is queried. A first failure is checked again 15 s later.",
+        "fr": "À quelle fréquence chaque serveur est interrogé. Un premier échec est revérifié 15 s plus tard.",
+        "de": "Wie oft jeder Server abgefragt wird. Ein erster Fehler wird 15 s später erneut geprüft.",
+        "es": "Con qué frecuencia se consulta cada servidor. Un primer fallo se vuelve a comprobar 15 s después."
+      },
+      "required": false,
+      "default": "60",
+      "options": [
+        {
+          "value": "30",
+          "label": {
+            "en": "30 seconds",
+            "fr": "30 secondes",
+            "de": "30 Sekunden",
+            "es": "30 segundos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "1 minute",
+            "fr": "1 minute",
+            "de": "1 Minute",
+            "es": "1 minuto"
+          }
+        },
+        {
+          "value": "120",
+          "label": {
+            "en": "2 minutes",
+            "fr": "2 minutes",
+            "de": "2 Minuten",
+            "es": "2 minutos"
+          }
+        },
+        {
+          "value": "300",
+          "label": {
+            "en": "5 minutes",
+            "fr": "5 minutes",
+            "de": "5 Minuten",
+            "es": "5 minutos"
+          }
+        },
+        {
+          "value": "600",
+          "label": {
+            "en": "10 minutes",
+            "fr": "10 minutes",
+            "de": "10 Minuten",
+            "es": "10 minutos"
+          }
+        }
+      ]
+    },
+    {
+      "key": "timeout",
+      "type": "select",
+      "label": {
+        "en": "Answer timeout",
+        "fr": "Délai d'attente des réponses",
+        "de": "Wartezeit auf Antworten",
+        "es": "Tiempo de espera de respuesta"
+      },
+      "description": {
+        "en": "Per packet. Raise it for a distant server.",
+        "fr": "Par paquet. À augmenter pour un serveur lointain.",
+        "de": "Pro Paket. Für einen weit entfernten Server erhöhen.",
+        "es": "Por paquete. Auméntelo para un servidor lejano."
+      },
+      "required": false,
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": {
+            "en": "2 seconds",
+            "fr": "2 secondes",
+            "de": "2 Sekunden",
+            "es": "2 segundos"
+          }
+        },
+        {
+          "value": "3",
+          "label": {
+            "en": "3 seconds",
+            "fr": "3 secondes",
+            "de": "3 Sekunden",
+            "es": "3 segundos"
+          }
+        },
+        {
+          "value": "5",
+          "label": {
+            "en": "5 seconds",
+            "fr": "5 secondes",
+            "de": "5 Sekunden",
+            "es": "5 segundos"
+          }
+        },
+        {
+          "value": "10",
+          "label": {
+            "en": "10 seconds",
+            "fr": "10 secondes",
+            "de": "10 Sekunden",
+            "es": "10 segundos"
+          }
+        }
+      ]
+    },
+    {
+      "key": "attempts",
+      "type": "select",
+      "label": {
+        "en": "Attempts per reading",
+        "fr": "Essais par lecture",
+        "de": "Versuche pro Abfrage",
+        "es": "Intentos por lectura"
+      },
+      "description": {
+        "en": "UDP packets get lost: a reading fails only after this many tries.",
+        "fr": "Les paquets UDP se perdent : une lecture échoue seulement après ce nombre d’essais.",
+        "de": "UDP-Pakete gehen verloren: Eine Abfrage scheitert erst nach so vielen Versuchen.",
+        "es": "Los paquetes UDP se pierden: una lectura solo falla tras este número de intentos."
+      },
+      "required": false,
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": {
+            "en": "1",
+            "fr": "1",
+            "de": "1",
+            "es": "1"
+          }
+        },
+        {
+          "value": "2",
+          "label": {
+            "en": "2",
+            "fr": "2",
+            "de": "2",
+            "es": "2"
+          }
+        },
+        {
+          "value": "3",
+          "label": {
+            "en": "3",
+            "fr": "3",
+            "de": "3",
+            "es": "3"
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of the names",
+        "fr": "Langue des noms",
+        "de": "Sprache der Namen",
+        "es": "Idioma de los nombres"
+      },
+      "description": {
+        "en": "Of the device features and of the texts the integration writes.",
+        "fr": "Des fonctionnalités des appareils et des textes écrits par l'intégration.",
+        "de": "Der Gerätefunktionen und der Texte, die die Integration schreibt.",
+        "es": "De las funciones de los dispositivos y de los textos que escribe la integración."
+      },
+      "required": false,
+      "default": "fr",
+      "options": [
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "English",
+            "de": "English",
+            "es": "English"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "Français",
+            "fr": "Français",
+            "de": "Français",
+            "es": "Français"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "Deutsch",
+            "fr": "Deutsch",
+            "de": "Deutsch",
+            "es": "Deutsch"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Español",
+            "fr": "Español",
+            "de": "Español",
+            "es": "Español"
+          }
+        }
+      ]
     }
   ],
   "actions": [
     {
-      "key": "test_weather",
-      "label": { "en": "Test the weather provider", "fr": "Tester le fournisseur météo" },
-      "timeout_seconds": 30
-    },
-    {
-      "key": "identify",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "fields": [
-        {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
-          "required": true
-        }
-      ]
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Queries every server now and reports what it finds.",
+        "fr": "Interroge chaque serveur maintenant et indique ce qu’il trouve.",
+        "de": "Fragt jeden Server sofort ab und meldet, was er findet.",
+        "es": "Consulta cada servidor ahora e indica lo que encuentra."
+      },
+      "timeout_seconds": 90
     }
   ],
   "scene_triggers": [
     {
-      "key": "motion_detected",
-      "label": { "en": "Motion detected", "fr": "Mouvement détecté" },
+      "key": "player_joined",
+      "label": {
+        "en": "A player joined the game server",
+        "fr": "Un joueur a rejoint le serveur de jeu",
+        "de": "Ein Spieler ist dem Spieleserver beigetreten",
+        "es": "Un jugador se ha unido al servidor de juego"
+      },
       "description": {
-        "en": "A demo motion sensor saw a person or an animal move.",
-        "fr": "Un détecteur de démonstration a vu bouger une personne ou un animal."
+        "en": "Seen at the next reading. With the name when the game gives the names of everyone online.",
+        "fr": "Vu à la lecture suivante. Avec le pseudo quand le jeu donne les noms de tous les joueurs.",
+        "de": "Bei der nächsten Abfrage erkannt. Mit Namen, wenn das Spiel die Namen aller Spieler liefert.",
+        "es": "Detectado en la lectura siguiente. Con el nombre cuando el juego facilita los nombres de todos."
       },
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Sensor", "fr": "Détecteur" }
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
         },
         {
-          "key": "target",
-          "type": "multi_select",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" },
-          "options": [
-            { "value": "person", "label": { "en": "Person", "fr": "Personne" } },
-            { "value": "animal", "label": { "en": "Animal", "fr": "Animal" } }
-          ]
+          "key": "player",
+          "type": "string",
+          "label": {
+            "en": "Player name (empty: anyone)",
+            "fr": "Pseudo (vide : n'importe qui)",
+            "de": "Spielername (leer: beliebig)",
+            "es": "Nombre del jugador (vacío: cualquiera)"
+          },
+          "description": {
+            "en": "Exactly as in the game. Only for the games that give names.",
+            "fr": "Exactement comme dans le jeu. Seulement pour les jeux qui donnent les noms.",
+            "de": "Genau wie im Spiel. Nur für Spiele, die Namen liefern.",
+            "es": "Exactamente como en el juego. Solo para los juegos que facilitan los nombres."
+          }
         }
       ],
       "variables": [
         {
-          "key": "target",
+          "key": "player",
           "type": "string",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" }
+          "label": {
+            "en": "Player name (empty if unknown)",
+            "fr": "Pseudo (vide si inconnu)",
+            "de": "Spielername (leer, wenn unbekannt)",
+            "es": "Nombre del jugador (vacío si se desconoce)"
+          }
+        },
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "players_online",
+          "type": "number",
+          "label": {
+            "en": "Players online",
+            "fr": "Joueurs connectés",
+            "de": "Spieler online",
+            "es": "Jugadores conectados"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "player_left",
+      "label": {
+        "en": "A player left the game server",
+        "fr": "Un joueur a quitté le serveur de jeu",
+        "de": "Ein Spieler hat den Spieleserver verlassen",
+        "es": "Un jugador ha abandonado el servidor de juego"
+      },
+      "description": {
+        "en": "Not fired when the server goes offline: \"The game server went offline\" says it.",
+        "fr": "Pas déclenché quand le serveur tombe : « Le serveur de jeu est hors ligne » le dit.",
+        "de": "Nicht ausgelöst, wenn der Server ausfällt: Das sagt „Der Spieleserver ist offline“.",
+        "es": "No se activa cuando el servidor se cae: lo indica «El servidor de juego está fuera de línea»."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
+        },
+        {
+          "key": "player",
+          "type": "string",
+          "label": {
+            "en": "Player name (empty: anyone)",
+            "fr": "Pseudo (vide : n'importe qui)",
+            "de": "Spielername (leer: beliebig)",
+            "es": "Nombre del jugador (vacío: cualquiera)"
+          },
+          "description": {
+            "en": "Exactly as in the game. Only for the games that give names.",
+            "fr": "Exactement comme dans le jeu. Seulement pour les jeux qui donnent les noms.",
+            "de": "Genau wie im Spiel. Nur für Spiele, die Namen liefern.",
+            "es": "Exactamente como en el juego. Solo para los juegos que facilitan los nombres."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "player",
+          "type": "string",
+          "label": {
+            "en": "Player name (empty if unknown)",
+            "fr": "Pseudo (vide si inconnu)",
+            "de": "Spielername (leer, wenn unbekannt)",
+            "es": "Nombre del jugador (vacío si se desconoce)"
+          }
+        },
+        {
+          "key": "minutes_played",
+          "type": "number",
+          "label": {
+            "en": "Minutes played",
+            "fr": "Minutes jouées",
+            "de": "Gespielte Minuten",
+            "es": "Minutos jugados"
+          }
+        },
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "players_online",
+          "type": "number",
+          "label": {
+            "en": "Players online",
+            "fr": "Joueurs connectés",
+            "de": "Spieler online",
+            "es": "Jugadores conectados"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_offline",
+      "label": {
+        "en": "The game server went offline",
+        "fr": "Le serveur de jeu est hors ligne",
+        "de": "Der Spieleserver ist offline",
+        "es": "El servidor de juego está fuera de línea"
+      },
+      "description": {
+        "en": "After two readings without an answer, 15 s apart.",
+        "fr": "Après deux lectures sans réponse, à 15 s d’intervalle.",
+        "de": "Nach zwei Abfragen ohne Antwort, im Abstand von 15 s.",
+        "es": "Tras dos lecturas sin respuesta, con 15 s de intervalo."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_online",
+      "label": {
+        "en": "The game server is back online",
+        "fr": "Le serveur de jeu est de nouveau en ligne",
+        "de": "Der Spieleserver ist wieder online",
+        "es": "El servidor de juego vuelve a estar en línea"
+      },
+      "description": {
+        "en": "It answers again after having been offline.",
+        "fr": "Il répond de nouveau après avoir été hors ligne.",
+        "de": "Er antwortet wieder, nachdem er offline war.",
+        "es": "Vuelve a responder tras haber estado fuera de línea."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "minutes_offline",
+          "type": "number",
+          "label": {
+            "en": "Minutes offline",
+            "fr": "Minutes hors ligne",
+            "de": "Minuten offline",
+            "es": "Minutos fuera de línea"
+          }
+        },
+        {
+          "key": "players_online",
+          "type": "number",
+          "label": {
+            "en": "Players online",
+            "fr": "Joueurs connectés",
+            "de": "Spieler online",
+            "es": "Jugadores conectados"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_empty",
+      "label": {
+        "en": "The game server is empty",
+        "fr": "Le serveur de jeu est vide",
+        "de": "Der Spieleserver ist leer",
+        "es": "El servidor de juego está vacío"
+      },
+      "description": {
+        "en": "The last player left (bots are not counted).",
+        "fr": "Le dernier joueur est parti (les bots ne comptent pas).",
+        "de": "Der letzte Spieler ist gegangen (Bots zählen nicht).",
+        "es": "El último jugador se ha ido (los bots no cuentan)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "server_full",
+      "label": {
+        "en": "The game server is full",
+        "fr": "Le serveur de jeu est plein",
+        "de": "Der Spieleserver ist voll",
+        "es": "El servidor de juego está lleno"
+      },
+      "description": {
+        "en": "Every player slot is taken.",
+        "fr": "Toutes les places sont prises.",
+        "de": "Alle Spielerplätze sind belegt.",
+        "es": "Todas las plazas están ocupadas."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: any)",
+            "fr": "Serveur (vide : n'importe lequel)",
+            "de": "Server (leer: beliebig)",
+            "es": "Servidor (vacío: cualquiera)"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
+        },
+        {
+          "key": "device",
+          "type": "string",
+          "label": {
+            "en": "Server device",
+            "fr": "Appareil du serveur",
+            "de": "Gerät des Servers",
+            "es": "Dispositivo del servidor"
+          }
+        },
+        {
+          "key": "players_online",
+          "type": "number",
+          "label": {
+            "en": "Players online",
+            "fr": "Joueurs connectés",
+            "de": "Spieler online",
+            "es": "Jugadores conectados"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
         }
       ]
     }
   ],
   "scene_actions": [
     {
-      "key": "identify_device",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "description": {
-        "en": "Make a device signal itself (the demo light blinks).",
-        "fr": "Fait se signaler un appareil (la lampe de démonstration clignote)."
+      "key": "read_server",
+      "label": {
+        "en": "Read a game server",
+        "fr": "Lire un serveur de jeu",
+        "de": "Spieleserver abfragen",
+        "es": "Leer un servidor de juego"
       },
-      "timeout_seconds": 15,
+      "description": {
+        "en": "Queries it now. Its state goes to the next steps: a message, or \"Continue only if\" on Online.",
+        "fr": "L'interroge maintenant. Son état passe aux étapes suivantes : un message, ou « Continuer seulement si » sur En ligne.",
+        "de": "Fragt ihn sofort ab. Sein Zustand geht an die nächsten Schritte: eine Nachricht oder „Nur fortfahren, wenn“ auf Online.",
+        "es": "Lo consulta ahora. Su estado pasa a los pasos siguientes: un mensaje, o «Continuar solo si» sobre En línea."
+      },
+      "timeout_seconds": 60,
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
+          "label": {
+            "en": "Server",
+            "fr": "Serveur",
+            "de": "Server",
+            "es": "Servidor"
+          },
           "required": true
         }
       ],
       "outputs": [
         {
-          "key": "signalled",
+          "key": "online",
           "type": "boolean",
-          "label": { "en": "Device signalled", "fr": "Appareil signalé" }
+          "label": {
+            "en": "Online",
+            "fr": "En ligne",
+            "de": "Online",
+            "es": "En línea"
+          }
+        },
+        {
+          "key": "players_online",
+          "type": "number",
+          "label": {
+            "en": "Players online",
+            "fr": "Joueurs connectés",
+            "de": "Spieler online",
+            "es": "Jugadores conectados"
+          }
+        },
+        {
+          "key": "players_max",
+          "type": "number",
+          "label": {
+            "en": "Player slots",
+            "fr": "Places",
+            "de": "Spielerplätze",
+            "es": "Plazas"
+          }
+        },
+        {
+          "key": "players",
+          "type": "string",
+          "label": {
+            "en": "Players",
+            "fr": "Joueurs",
+            "de": "Spieler",
+            "es": "Jugadores"
+          }
+        },
+        {
+          "key": "map",
+          "type": "string",
+          "label": {
+            "en": "Map",
+            "fr": "Carte",
+            "de": "Karte",
+            "es": "Mapa"
+          }
+        },
+        {
+          "key": "server_name",
+          "type": "string",
+          "label": {
+            "en": "Name given by the server",
+            "fr": "Nom donné par le serveur",
+            "de": "Vom Server gemeldeter Name",
+            "es": "Nombre indicado por el servidor"
+          }
+        },
+        {
+          "key": "version",
+          "type": "string",
+          "label": {
+            "en": "Version",
+            "fr": "Version",
+            "de": "Version",
+            "es": "Versión"
+          }
+        },
+        {
+          "key": "latency",
+          "type": "number",
+          "label": {
+            "en": "Ping (ms)",
+            "fr": "Ping (ms)",
+            "de": "Ping (ms)",
+            "es": "Ping (ms)"
+          }
+        },
+        {
+          "key": "server",
+          "type": "string",
+          "label": {
+            "en": "Server name",
+            "fr": "Nom du serveur",
+            "de": "Name des Servers",
+            "es": "Nombre del servidor"
+          }
+        },
+        {
+          "key": "game",
+          "type": "string",
+          "label": {
+            "en": "Game",
+            "fr": "Jeu",
+            "de": "Spiel",
+            "es": "Juego"
+          }
         }
       ]
     }
   ],
   "widgets": [
     {
-      "key": "demo_status",
-      "label": { "en": "Demo status", "fr": "État de la démo" },
-      "description": {
-        "en": "Live temperature and plug power, plug connection and observed location.",
-        "fr": "Température et puissance en direct, connexion de la prise, position observée."
+      "key": "game_servers",
+      "label": {
+        "en": "Game servers",
+        "fr": "Serveurs de jeu",
+        "de": "Spieleserver",
+        "es": "Servidores de juego"
       },
-      "icon": "activity",
-      "action_timeout_seconds": 15
+      "description": {
+        "en": "Whether each server is online, players online and who is playing.",
+        "fr": "Si chaque serveur est en ligne, joueurs connectés et qui joue.",
+        "de": "Ob jeder Server online ist, Spieler online und wer spielt.",
+        "es": "Si cada servidor está en línea, jugadores conectados y quién juega."
+      },
+      "icon": "monitor",
+      "settings": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Server (empty: all)",
+            "fr": "Serveur (vide : tous)",
+            "de": "Server (leer: alle)",
+            "es": "Servidor (vacío: todos)"
+          },
+          "required": false
+        }
+      ]
     }
   ]
 }

@@ -8,16 +8,20 @@ contributors.
 A Gladys Assistant **external integration**: a Node.js service (Node 22+, ESM,
 no build step) that runs in its own sandboxed Docker container and talks to
 Gladys through
-[`@gladysassistant/integration-sdk`](https://github.com/GladysAssistant/integration-sdk-js),
-its only runtime dependency. It started from the official JavaScript template.
+[`@gladysassistant/integration-sdk`](https://github.com/GladysAssistant/integration-sdk-js).
+Its only other runtime dependency is [GameDig](https://github.com/gamedig/node-gamedig)
+(MIT), which speaks the query protocols of the games. It started from the
+official JavaScript template.
 
 ## Commands
 
 ```bash
 npm install
 npm test                                  # node --test, the built-in runner
-node --test test/devices.test.js          # one file
-node --test --test-name-pattern "plug"    # tests whose name matches
+node --test test/hub.test.js              # one file
+node --test --test-name-pattern "outage"  # tests whose name matches
+npm run test:real                         # against a real server (env, see test/real/)
+node scripts/probe.mjs openarena 192.0.2.10   # read a real server
 npm run lint                              # ESLint
 npm run format:check                      # Prettier, as the CI runs it
 npm run format                            # Prettier, fix in place
@@ -31,16 +35,24 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
-src/scenes.js                     scene action handlers (manifest `scene_actions`)
-src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+index.js                          SDK wiring only: src/app.js registers the handlers before connect()
+src/app.js                        every SDK handler -> the hub (also used by the tests)
+src/hub.js                        servers, reading timer, states, transitions -> scene events, report
+src/devices.js                    one device per configured server: features, names (4 languages), values
+src/query.js                      GameDig query + what is kept of its answer (people vs bots, names)
+src/games.js                      the drop-down list of games, GameDig types, secret -> GameDig option
+src/address.js                    addresses as typed in a server browser
+src/scenes.js                     scene action handler (manifest `scene_actions`)
+src/widgets.js                    dashboard widget `game_servers` (manifest `widgets`)
+src/texts.js                      connection, error, players, report and action texts (4 languages)
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
-gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
+gladys-assistant-integration.json manifest (generated once, edited by hand since: 4 identical slots)
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys (en and fr mandatory)
 test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+                                  and helpers/fakeNetwork.js (real GameDig answers, players swapped)
+test/fixtures/real/               GameDig answers of a real OpenArena 0.8.8 server (Docker)
+test/real/                        optional test against a real server (`npm run test:real`)
+scripts/probe.mjs                 read-only probe of a real server (no name, no secret printed)
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -70,8 +82,10 @@ test/                             node --test, against the SDK's fake Gladys (in
   `type: "provider"`: 5.1.0). `test/manifest.test.js` ties the manifest to the
   code (defaults, action, scene and widget handlers): change both sides
   together.
-- **User-facing text** is bilingual (English and French): action messages,
-  manifest texts, and `docs/en.md` / `docs/fr.md`, kept in sync.
+- **User-facing text** exists in English, French, German and Spanish: action
+  messages, widget content, feature names, manifest texts, and
+  `docs/en.md`, `docs/fr.md`, `docs/de.md`, `docs/es.md`, kept in sync
+  (`test/i18n.test.js` checks the languages and the doc sections).
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.
 
@@ -197,6 +211,44 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 - Les filtres de scène ne font qu'égalité et appartenance : un seuil reste le travail d'un capteur.
 - **Les clés de widgets, de déclencheurs et d'actions sont figées une fois publiées.**
 - `gladys_version` `>=5.1.0` dès qu'il y a widgets, déclencheurs ou actions de scène.
+
+- Les filtres `string` d'un déclencheur comparent **à l'identique** (`===`) : un pseudo filtré
+  doit être saisi avec sa casse exacte. Le dire dans la description du champ.
+- Un champ `secret` du `config_schema` **ne peut pas avoir de `default`** : le validateur du store
+  rejette le manifeste.
+
+## GameDig (propre à ce dépôt)
+
+- **GameDig 5** (ESM, ~7 Mo de dépendances, aucune native). Une seule instance `GameDig` pour le
+  processus : elle partage **un socket UDP** entre les requêtes et mémorise le port qui a répondu
+  (`portCache`). Le réseau en pont du bac à sable suffit (UDP sortant), pas besoin de
+  `listenUdpPort`.
+- **Port** : avec un port saisi, GameDig essaie `port + port_query_offset` du jeu, puis le port
+  lui-même : le port de jeu **et** le port de requête marchent. Sans port, le port de requête du
+  jeu. Chaque essai coûte `socketTimeout` sans réponse : 4 serveurs muets × 3 essais peuvent
+  prendre une minute (le premier démarrage lit avant de publier les appareils).
+- `maxRetries: 0` vaut **1** (`||` dans `QueryRunner`) : la liste « Essais » commence à 1.
+- **Une erreur GameDig ne dit pas pourquoi** : « Failed all N attempts », avec dans `stack` la pile
+  de chaque essai (URL, et pour Satisfactory/Terraria un jeton possible). `src/query.js` n'en garde
+  que le type (DNS ou pas de réponse) : ne jamais journaliser l'erreur brute.
+- **`numplayers` n'a pas le même sens partout** : Valve et Quake y comptent les bots (listés dans
+  `bots`, ping 0 pour Quake 3), d'autres non ; `maxplayers` et `password` arrivent parfois en
+  chaîne (`"16"`, `"0"` sur OpenArena). `readState` retire les bots quand `numplayers` couvre
+  joueurs + bots. Les noms ne sont « complets » que s'il y en a exactement `online`, distincts
+  (CS2 n'en donne aucun, Valheim crossplay des vides).
+- Arrivées/départs : par nom entre deux lectures complètes, sinon **par nombre** (événement sans
+  pseudo), 10 au plus par lecture. Première lecture et retour de panne = nouvelle base, sans
+  événement. Une panne ne déclenche ni départs ni « vide ».
+- **Carte, nom du serveur, version** ne sont publiés qu'une fois vus non vides (`record.seen`) :
+  Mumble n'a pas de carte. L'appareil est republié quand l'ensemble grandit (« Mettre à jour » dans
+  Découverte si l'appareil était déjà ajouté).
+- Transport : `cloud` pour une adresse publique, `local` pour une adresse privée ou un nom `.local`,
+  `.lan`, `.home.arpa` ou sans point.
+- **Test réel dans la session** : `sago007/openarena` (OpenArena 0.8.8, ioq3) tourne dans le bac à
+  sable sur un réseau en pont ; lancer `oa_ded.x86_64 +set dedicated 1 … +set rconPassword …` (le
+  `dedicated 2` d'origine annonce le serveur au maître). Bots par RCON UDP (`addbot Sarge 1`,
+  `kick allbots`). Pas de vrai joueur humain possible : les arrivées sont testées avec la forme
+  GameDig des joueurs Quake 3 (ping > 0).
 
 ## Store
 
