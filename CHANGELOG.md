@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-21
+
 ### Added
 
 - Game servers in Gladys through GameDig (more than 300 games): up to four
@@ -24,4 +26,5 @@ the notes of the version's GitHub Release.
 - "Test the connection" button, reading interval, answer timeout and attempts
   in the configuration; every text in English, French, German and Spanish.
 
-[Unreleased]: https://github.com/guim31/gladys-gamedig/commits/main
+[Unreleased]: https://github.com/guim31/gladys-gamedig/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/guim31/gladys-gamedig/releases/tag/v1.0.0
