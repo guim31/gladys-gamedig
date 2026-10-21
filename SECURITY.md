@@ -30,6 +30,15 @@ Gladys before reporting a problem.
 
 In scope: the code of this repository and the Docker image it publishes.
 
+The integration stores nothing in `/data`. Its configuration (kept by
+Gladys) holds the addresses of the game servers and, for a few games, a
+password or token (Palworld admin password, Terraria TShock or Farming
+Simulator token, Satisfactory token): it is only sent to the game server it
+belongs to, by GameDig, and never written to the logs. The container only
+opens outgoing connections to the configured servers (UDP or TCP, depending
+on the game) and to Gladys.
+
 Out of scope: Gladys Assistant itself (see its
 [security policy](https://github.com/GladysAssistant/Gladys/security/policy)),
-and the third-party services and devices the integration talks to.
+GameDig (see its [repository](https://github.com/gamedig/node-gamedig)), and
+the game servers the integration reads.
