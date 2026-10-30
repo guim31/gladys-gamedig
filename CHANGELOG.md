@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-30
+
 ### Fixed
 
 - **Test the connection** now fails, so Gladys shows the report in red, when a server does not
@@ -32,5 +34,6 @@ the notes of the version's GitHub Release.
 - "Test the connection" button, reading interval, answer timeout and attempts
   in the configuration; every text in English, French, German and Spanish.
 
-[Unreleased]: https://github.com/guim31/gladys-gamedig/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/guim31/gladys-gamedig/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/guim31/gladys-gamedig/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/guim31/gladys-gamedig/releases/tag/v1.0.0
