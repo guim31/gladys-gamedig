@@ -269,13 +269,14 @@ test('"Test the connection" reports each server, and the slots it cannot read', 
       server_4_game: 'other',
       server_4_type: 'not-a-game',
       server_4_address: HOST_3,
+      language: 'en',
     },
   });
   t.after(() => w.app.stop());
   const ack = await w.fake.action('test_connection');
-  assert.equal(ack.success, true, ack.error);
+  assert.equal(ack.success, false, 'a server down or a slot not read shows the report as an error');
   assert.equal(
-    ack.data.message.en,
+    ack.error,
     [
       'Friday arena: OpenArena, 1/16 players, 4 ms, map oa_dm1',
       `Valheim ${HOST_3}: does not answer (game, port, query enabled?)`,
@@ -283,8 +284,25 @@ test('"Test the connection" reports each server, and the slots it cannot read', 
       '#4: unknown GameDig type, see its games list',
     ].join('\n'),
   );
-  assert.match(ack.data.message.fr, /^Friday arena : OpenArena, 1\/16 joueurs/);
   assert.equal(w.fake.connectionStatus.connected, true, 'one server answers');
+});
+
+test('"Test the connection" succeeds only when every server answers', async (t) => {
+  const w = await world(t, { server: new FakeServer({ players: ['Ranger'] }) });
+  const ok = await w.fake.action('test_connection');
+  assert.equal(ok.success, true, ok.error);
+  assert.match(ok.data.message.fr, /^Friday arena : OpenArena, 1\/16 joueurs/);
+  w.server.online = false;
+  const down = await w.fake.action('test_connection');
+  assert.equal(down.success, false);
+  assert.equal(down.error, 'Friday arena: does not answer (game, port, query enabled?)');
+});
+
+test('"Test the connection" with no server configured fails', async (t) => {
+  const w = await createWorld({ config: {} });
+  t.after(() => w.app.stop());
+  const ack = await w.fake.action('test_connection');
+  assert.equal(ack.success, false);
 });
 
 test('no server configured: the connection status says what to do', async (t) => {

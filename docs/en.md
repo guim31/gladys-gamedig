@@ -56,7 +56,8 @@ can send chat messages.
 3. Choose the **Reading interval** (1 minute by default), and if needed the
    **Answer timeout** and the **Attempts per reading** for a distant server.
 4. Save, then click **Test the connection**: one line per server, with its
-   game, players, ping and map.
+   game, players, ping and map. The result shows in red as soon as a server
+   does not answer.
 5. In **Discovery**, add the devices you want to keep in Gladys (history,
    dashboard). The scene triggers and the widget work even without them.
 

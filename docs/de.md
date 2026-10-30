@@ -58,7 +58,8 @@ kann Chatnachrichten senden.
    **Wartezeit auf Antworten** und die **Versuche pro Abfrage** für einen
    weit entfernten Server.
 4. Speichere und klicke auf **Verbindung testen**: eine Zeile pro Server, mit
-   Spiel, Spielern, Ping und Karte.
+   Spiel, Spielern, Ping und Karte. Das Ergebnis erscheint rot, sobald ein
+   Server nicht antwortet.
 5. Füge unter **Erkennung** die Geräte hinzu, die du in Gladys behalten
    willst (Verlauf, Dashboard). Die Szenen-Auslöser und das Widget
    funktionieren auch ohne sie.

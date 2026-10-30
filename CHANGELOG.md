@@ -10,6 +10,12 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Test the connection** now fails, so Gladys shows the report in red, when a server does not
+  answer, a slot cannot be read or no server is configured; green is kept for a test where every
+  server answers.
+
 ## [1.0.0] - 2026-10-21
 
 ### Added

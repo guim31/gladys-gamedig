@@ -59,7 +59,8 @@ enviar mensajes al chat.
    el **Tiempo de espera de respuesta** y los **Intentos por lectura** para un
    servidor lejano.
 4. Guarde y haga clic en **Probar la conexión**: una línea por servidor, con
-   su juego, jugadores, ping y mapa.
+   su juego, jugadores, ping y mapa. El resultado aparece en rojo en cuanto
+   un servidor no responde.
 5. En **Descubrimiento**, añada los dispositivos que quiera conservar en
    Gladys (historial, panel). Los disparadores de escena y el widget
    funcionan incluso sin ellos.

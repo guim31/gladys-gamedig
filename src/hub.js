@@ -672,9 +672,17 @@ export class GameServerHub {
     };
   }
 
-  /** "Test the connection": read every server now, one line each. */
+  /**
+   * "Test the connection": read every server now, one line each. Any server that does not answer,
+   * any slot it cannot read, or no server at all makes it fail, so Gladys shows the report in red
+   * rather than green (Prof_Techno, t/11454).
+   */
   async testConnection() {
     await this.pollAll();
+    const failed =
+      this.records.size === 0 ||
+      this.invalidTexts(this.language).length > 0 ||
+      [...this.records.values()].some((record) => record.error);
     const message = {};
     for (const [language, text] of Object.entries(REPORT_TEXT)) {
       const lines = [...this.records.values()].map((record) => {
@@ -698,6 +706,9 @@ export class GameServerHub {
         lines.push(pick(CONNECTION_TEXT.noServer, language));
       }
       message[language] = lines.join('\n');
+    }
+    if (failed) {
+      throw new Error(message[this.language] ?? message.en);
     }
     return message;
   }
