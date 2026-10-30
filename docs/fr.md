@@ -56,7 +56,8 @@ peut envoyer des messages dans le chat.
    le **Délai d'attente des réponses** et les **Essais par lecture** pour un
    serveur lointain.
 4. Enregistrez, puis cliquez sur **Tester la connexion** : une ligne par
-   serveur, avec son jeu, ses joueurs, son ping et sa carte.
+   serveur, avec son jeu, ses joueurs, son ping et sa carte. Le résultat
+   s'affiche en rouge dès qu'un serveur ne répond pas.
 5. Dans **Découverte**, ajoutez les appareils à garder dans Gladys
    (historique, tableau de bord). Les déclencheurs de scène et le widget
    marchent même sans eux.
