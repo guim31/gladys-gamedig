@@ -10,6 +10,11 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Changed
+
+- Documentation: which port a Steam server answers on (query port, where to find it), and ARK
+  clusters, one map per slot.
+
 ## [1.0.1] - 2026-10-30
 
 ### Fixed
