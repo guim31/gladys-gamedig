@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-30
+
 ### Changed
 
 - Documentation: which port a Steam server answers on (query port, where to find it), and ARK
@@ -39,6 +41,7 @@ the notes of the version's GitHub Release.
 - "Test the connection" button, reading interval, answer timeout and attempts
   in the configuration; every text in English, French, German and Spanish.
 
-[Unreleased]: https://github.com/guim31/gladys-gamedig/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/guim31/gladys-gamedig/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/guim31/gladys-gamedig/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/guim31/gladys-gamedig/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/guim31/gladys-gamedig/releases/tag/v1.0.0
