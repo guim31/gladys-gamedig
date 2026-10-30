@@ -131,6 +131,14 @@ with many players fires ten "joined" events at most.
   server (Valheim `-public 1`, Palworld REST API)? A firewall letting UDP
   through? `docker logs` of the integration with `LOG_LEVEL=debug` shows each
   reading.
+- **Steam servers (ARK: Survival Evolved, Rust, Counter-Strike…): which
+  port?** These games answer on a **query port**, often not the game port
+  (ARK: game 7777, query 27015). Find it in the host's panel ("Query port"),
+  in the server's launch line (`QueryPort=`), or ask its administrator. Type
+  it after the address: `192.0.2.10:27015`.
+- **ARK with several maps (cluster)**: each map is a server of its own, with
+  its own query port (often 27015, 27016…). A reading only sees the players of
+  the map it asks: add one map per slot (four at most) to see everyone.
 - **Name not found**: the name of the address does not resolve from Gladys.
 - **Unknown GameDig type**: the id typed in **GameDig type** is not in the
   GameDig games list.

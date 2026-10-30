@@ -136,6 +136,16 @@ redémarre avec beaucoup de joueurs déclenche dix arrivées au plus.
   sur le serveur (Valheim `-public 1`, API REST de Palworld) ? Un pare-feu qui
   laisse passer l'UDP ? Les `docker logs` de l'intégration avec
   `LOG_LEVEL=debug` montrent chaque lecture.
+- **Serveurs Steam (ARK: Survival Evolved, Rust, Counter-Strike…) : quel
+  port ?** Ces jeux répondent sur un **port de requête**, souvent différent du
+  port de jeu (ARK : jeu 7777, requête 27015). On le trouve dans le panneau de
+  l'hébergeur (« Query port »), dans la ligne de lancement du serveur
+  (`QueryPort=`), ou auprès de son administrateur. Saisissez-le après
+  l'adresse : `192.0.2.10:27015`.
+- **ARK à plusieurs cartes (cluster)** : chaque carte est un serveur à part,
+  avec son propre port de requête (souvent 27015, 27016…). Une lecture ne
+  voit que les joueurs de la carte interrogée : ajoutez une carte par
+  emplacement (quatre au plus) pour voir tout le monde.
 - **Nom introuvable** : le nom de l'adresse ne se résout pas depuis Gladys.
 - **Type GameDig inconnu** : l'identifiant tapé dans **Type GameDig** n'est
   pas dans la liste des jeux de GameDig.

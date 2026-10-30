@@ -143,6 +143,16 @@ máximo.
   activadas en el servidor (Valheim `-public 1`, API REST de Palworld)? ¿Un
   cortafuegos que deja pasar UDP? Los `docker logs` de la integración con
   `LOG_LEVEL=debug` muestran cada lectura.
+- **Servidores Steam (ARK: Survival Evolved, Rust, Counter-Strike…): ¿qué
+  puerto?** Estos juegos responden en un **puerto de consulta**, a menudo
+  distinto del puerto de juego (ARK: juego 7777, consulta 27015). Lo encontrará
+  en el panel del proveedor («Query port»), en la línea de arranque del
+  servidor (`QueryPort=`) o preguntando a su administrador. Escríbalo tras la
+  dirección: `192.0.2.10:27015`.
+- **ARK con varios mapas (clúster)**: cada mapa es un servidor propio, con su
+  propio puerto de consulta (a menudo 27015, 27016…). Una lectura solo ve a los
+  jugadores del mapa consultado: añada un mapa por ranura (cuatro como máximo)
+  para verlos a todos.
 - **Nombre no encontrado**: el nombre de la dirección no se resuelve desde
   Gladys.
 - **Tipo GameDig desconocido**: el identificador escrito en **Tipo GameDig**

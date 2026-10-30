@@ -137,6 +137,15 @@ der mit vielen Spielern neu startet, löst höchstens zehn Beitritte aus.
   Server aktiv (Valheim `-public 1`, REST-API von Palworld)? Eine Firewall,
   die UDP durchlässt? Die `docker logs` der Integration mit `LOG_LEVEL=debug`
   zeigen jede Abfrage.
+- **Steam-Server (ARK: Survival Evolved, Rust, Counter-Strike…): welcher
+  Port?** Diese Spiele antworten auf einem **Abfrage-Port**, oft nicht dem
+  Spielport (ARK: Spiel 7777, Abfrage 27015). Du findest ihn im Panel des
+  Hosters („Query port“), in der Startzeile des Servers (`QueryPort=`) oder
+  beim Admin. Gib ihn nach der Adresse ein: `192.0.2.10:27015`.
+- **ARK mit mehreren Karten (Cluster)**: Jede Karte ist ein eigener Server mit
+  eigenem Abfrage-Port (oft 27015, 27016…). Eine Abfrage sieht nur die Spieler
+  der abgefragten Karte: Lege eine Karte pro Platz an (höchstens vier), um alle
+  zu sehen.
 - **Name nicht gefunden**: Der Name der Adresse lässt sich von Gladys aus
   nicht auflösen.
 - **Unbekannter GameDig-Typ**: Die unter **GameDig-Typ** eingegebene Kennung
